@@ -21,9 +21,12 @@ error_reporting(E_ALL);
         <div class="row center-align">
 
           <?php
-
+          $session = FALSE;
+          if(isset($_GET['ss']) && !empty($_GET['ss'])){
+            $session = intval($_GET['ss']);
+          }
           include('./controleur/Agenda.php');
-          $agenda = new Agenda(time(),"day");
+          $agenda = new Agenda(time(),"day",$session);
           $agenda->vue();
           //$jour = new Jour(time()+4*86400);
           //include("./vue/jour.php"); ?>
