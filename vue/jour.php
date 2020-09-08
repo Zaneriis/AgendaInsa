@@ -31,7 +31,7 @@
     $plages[$hour->format("H:i")] = array();
   }
 
-  foreach ($jour->getEvenements() as $event) {
+  foreach ($this->getEvenements() as $event) {
     putEventInPlage($plages, $event);
   }
 

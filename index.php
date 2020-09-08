@@ -24,10 +24,11 @@ error_reporting(E_ALL);
 
           <?php
 
-          include('./controleur/Jour.php');
-
-          $jour = new Jour(time()+4*86400);
-          include("./vue/jour.php"); ?>
+          include('./controleur/Agenda.php');
+          $agenda = new Agenda(time(),"day");
+          $agenda->vue();
+          //$jour = new Jour(time()+4*86400);
+          //include("./vue/jour.php"); ?>
 
         </div>
       </div>

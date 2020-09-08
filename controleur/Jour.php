@@ -12,11 +12,15 @@
       $this->evenements = $data;
     }
 
-    function vue(){
+    function vuePrint(){
       echo '<pre>';
       echo $this->getNom();
       print_r($this->getEvenements());
       echo '</pre>';
+    }
+
+    function vue(){
+      include("./vue/jour.php");
     }
 
     function getNom(){
@@ -24,8 +28,7 @@
     }
 
     function getEvenements(){
-<<<<<<< HEAD
-      return $this->evenement;
+      return $this->evenements;
     }
 
     private function loadEvent(){
@@ -34,9 +37,7 @@
       foreach ($obj as $key => $value) {
         $this->evenement = $value;
       }
-=======
-      return $this->evenements;
->>>>>>> 33278f9f9865669a9e2999070a2416d46f895c37
+
     }
 
 
