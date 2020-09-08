@@ -9,17 +9,23 @@ require_once('Jour.php');
     private $type;
     private $data;
     private $listJours;
-    public function __construct($time = FALSE, $type = 'week')
+    private $session;
+    public function __construct($time = FALSE, $type = 'week', $session = FALSE)
     {
       if($time === FALSE) $time = time();
       $this->time = $time;
       $this->type = $type;
+      $this->session = $session;
       $this->listJours = array();
       $this->loadEvent();
     }
 
     private function loadEvent(){
-      $json = file_get_contents('http://api.pacary.net/AgendaInsaRouen/index.php?fo=2020-ING-ASI-S7&ty='.$this->getType().'&ts='.$this->getInsaTime());
+      $url = 'http://api.pacary.net/AgendaInsaRouen/index.php?fo=2020-ING-ASI-S7&ty='.$this->getType().'&ts='.$this->getInsaTime();
+      if($this->session !== FALSE){
+        $url = $url.'&ss='.intval($this->session);
+      }
+      $json = file_get_contents($url);
       $this->data = json_decode($json);
 
       foreach ($this->data as $key => $value) {

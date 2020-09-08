@@ -23,9 +23,12 @@ error_reporting(E_ALL);
           <h1>Agenda INSA Rouen</h1>
 
           <?php
-
+          $session = FALSE;
+          if(isset($_GET['ss']) && !empty($_GET['ss'])){
+            $session = intval($_GET['ss']);
+          }
           include('./controleur/Agenda.php');
-          $agenda = new Agenda(time(),"day");
+          $agenda = new Agenda(time(),"day",$session);
           $agenda->vue();
           //$jour = new Jour(time()+4*86400);
           //include("./vue/jour.php"); ?>
