@@ -1,0 +1,24 @@
+.row-jour {
+  min-height: 50vh;
+}
+
+.row-event {
+  height: 5vh;
+  background-color: green;
+  margin-bottom: 0;
+}
+
+.row-event-empty {
+  height: 2vh;
+  background-color: grey;
+  margin-bottom: 0;
+}
+
+.col-event {
+  height: 100%;
+
+}
+
+.row-heure {
+  padding-left: 10%;
+}

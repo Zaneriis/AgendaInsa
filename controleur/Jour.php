@@ -33,11 +33,10 @@
     }
 
     private function loadEvent(){
-      $json = file_get_contents('http://api.pacary.net/AgendaInsaRouen/index.php?fo=2020-ING-ASI-S7&ty=day&ts='.this->getInsaTime());
+      $json = file_get_contents('http://api.pacary.net/AgendaInsaRouen/index.php?fo=2020-ING-ASI-S7&ty=day&ts='.$this->getInsaTime());
       $obj = json_decode($json);
       foreach ($obj as $key => $value) {
         $this->evenement = $value;
-        breck;
       }
     }
 
