@@ -17,10 +17,8 @@ error_reporting(E_ALL);
 
     <body>
 
-      <div class="blue container">
+      <div class="container">
         <div class="row center-align">
-
-          <h1>Agenda INSA Rouen</h1>
 
           <?php
 

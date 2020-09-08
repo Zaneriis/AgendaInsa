@@ -22,6 +22,23 @@
     return "row-event";
   }
 
+  function getCouleur() {
+    static $compteur = 0;
+
+    $couleurs = array("red lighten-3","pink lighten-3","purple lighten-3","deep-purple lighten-3","indigo lighten-3","blue lighten-3","teal lighten-3","green lighten-3","light-green lighten-3","lime lighten-3","yellow lighten-3","amber lighten-3","orange lighten-3","deep-orange lighten-3","brown lighten-3");
+
+    $couleur = $couleurs[$compteur];
+
+
+    $compteur++;
+
+    if ($compteur >= sizeof($couleurs)) {
+      $compteur = 0;
+    }
+
+    return $couleur;
+
+  }
 
   $period = new DatePeriod(new DateTime('08:00'), new DateInterval('PT15M'), new DateTime('20:00'));
 
@@ -32,14 +49,20 @@
   }
 
   foreach ($this->getEvenements() as $event) {
+    $event->couleur = getCouleur();
     putEventInPlage($plages, $event);
   }
-
 ?>
 
 <link rel="stylesheet" href="vue/css/jour.css">
 
-<div class="row row-jour yellow">
+<div class="row row-jour-title">
+  <div class="col">
+    <h4><?php $this->getNom(); ?></h4>
+  </div>
+</div>
+
+<div class="row row-planning">
   <div class="col s1">
       <?php
 
@@ -59,7 +82,7 @@
 
         echo "<div class='row ".(getClasseRowEvent($evenements))."'>";
         foreach ($evenements as $event) {
-          echo "<div class='col-event col s".(12/(count($evenements)))."'>";
+          echo "<div class='col-event col s".(12/(count($evenements)))." ".($event->couleur)."'>";
 
           if (!is_null($previousPlage)) {
             if (!in_array($event, $previousPlage)) {

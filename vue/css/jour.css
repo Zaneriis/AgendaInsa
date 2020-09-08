@@ -1,16 +1,14 @@
-.row-jour {
+.row-planning {
   min-height: 50vh;
 }
 
 .row-event {
-  height: 5vh;
-  background-color: green;
+  height: 3vh;
   margin-bottom: 0;
 }
 
 .row-event-empty {
   height: 2vh;
-  background-color: grey;
   margin-bottom: 0;
 }
 
