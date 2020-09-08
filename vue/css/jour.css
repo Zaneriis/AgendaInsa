@@ -1,22 +1,11 @@
-.row-planning {
-  min-height: 50vh;
-}
-
-.row-event {
-  height: 3vh;
-  margin-bottom: 0;
-}
-
-.row-event-empty {
-  height: 2vh;
-  margin-bottom: 0;
-}
-
-.col-event {
-  height: 100%;
-
+.row {
+    margin-bottom: 0 !important;
 }
 
 .row-heure {
   padding-left: 10%;
+}
+
+.horaire {
+  margin-top: -5px;
 }

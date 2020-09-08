@@ -26,7 +26,7 @@ error_reporting(E_ALL);
             $session = intval($_GET['ss']);
           }
           include('./controleur/Agenda.php');
-          $agenda = new Agenda(time(),"day",$session);
+          $agenda = new Agenda(time(),"week",$session);
           $agenda->vue();
           //$jour = new Jour(time()+4*86400);
           //include("./vue/jour.php"); ?>
