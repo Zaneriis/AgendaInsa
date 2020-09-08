@@ -4,31 +4,27 @@
    */
   class Jour
   {
-    private $time;
-    private $evenement;
-    function __construct($time)
+    private $label;
+    private $evenements;
+    function __construct($data, $label)
     {
-      $this->time =  $time;
-      $this->loadEvent();
+      $this->label =  $label;
+      $this->evenements = $data;
     }
 
     function vue(){
-
+      echo '<pre>';
+      echo $this->getNom();
+      print_r($this->getEvenements());
+      echo '</pre>';
     }
 
     function getNom(){
-      return date('l d F', $this->getTime());
-    }
-
-    function getInsaTime(){
-      return date("Ymd",$this->getTime());
-    }
-
-    function getTime(){
-      return $this->time;
+      return $this->label;
     }
 
     function getEvenements(){
+<<<<<<< HEAD
       return $this->evenement;
     }
 
@@ -38,6 +34,9 @@
       foreach ($obj as $key => $value) {
         $this->evenement = $value;
       }
+=======
+      return $this->evenements;
+>>>>>>> 33278f9f9865669a9e2999070a2416d46f895c37
     }
 
 
