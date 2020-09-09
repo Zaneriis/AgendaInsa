@@ -1,7 +1,7 @@
 <?php
 
 function FrStringToTimeStamp($str){
-  $o = DateTime::createFromFormat ("YmdHis", "20200910003300", new DateTimeZone('Europe/Paris') );
+  $o = DateTime::createFromFormat ("YmdHis", $str, new DateTimeZone('Europe/Paris') );
   return $o->getTimeStamp();
 }
 
@@ -21,6 +21,8 @@ class EventICal
 
   public function setStart($data){
     $this->dtStart = FrStringToTimeStamp($data);
+    echo $data;
+    echo '<br />';
     return $this;
   }
   public function setEnd($data){
