@@ -45,7 +45,8 @@ require_once('Jour.php');
 
       if (count($this->listJours) == 1) {
         echo "<div class='col s4 offset-s4'>";
-        ($this->listJours[0])->vue();
+        $o = $this->listJours[0];
+        $o->vue();
         echo "</div>";
       }
       else {
