@@ -11,7 +11,7 @@
 
 	$monfichier = fopen('test.ics', 'a+');
 
-	$a->print($monfichier);
+	$a->outputicsFile($monfichier);
 
 	fclose($monfichier);
 ?>
