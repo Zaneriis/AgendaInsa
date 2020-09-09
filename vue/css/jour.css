@@ -39,3 +39,7 @@
 .event-comment {
   height: 100%;
 }
+
+.heure_de_cours {
+  font-weight: bold;
+}

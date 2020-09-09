@@ -148,7 +148,7 @@
       $tailleEvenement = 2 * $nbplages ;
       echo "<div data-position='bottom' data-tooltip='$event->comment ($event->time)' class=' tooltipped col-event col s".(12/(count($evenements)))."' style='height:".$tailleEvenement."vh;'>";
         echo "<div class='row center-align $couleurSecondaire'><div class='col s12'>";
-          echo $event->time;
+          echo "<span class='heure_de_cours'>".$event->time."</span>";
         echo "</div></div>";
         echo "<div class='row event-comment $couleurPrincipale'><div class='col s12'>";
           echo $event->comment;
