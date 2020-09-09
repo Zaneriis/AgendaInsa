@@ -36,7 +36,7 @@ class EventICal
     return $this;
   }
 
-  public function print($fichier){
+  public function outputicsFile($fichier){
     fputs($fichier, 'BEGIN:VEVENT');
     fputs($fichier, 'DTSTART:'.date('Ymd\This',$this->dtStart).'Z');
     fputs($fichier, 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z');

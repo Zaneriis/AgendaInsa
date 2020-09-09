@@ -37,7 +37,7 @@ class FileIcsGenerator
     return $this;
   }
 
-  public function print($fichier){
+  public function outputicsFile($fichier){
       fputs($fichier, 'BEGIN:VCALENDAR');
       fputs($fichier, 'PRODID:-//Serveur de planning Cocktail 0.9//iCal4j 1.0');
       fputs($fichier, 'VERSION:2.0');
@@ -46,7 +46,7 @@ class FileIcsGenerator
       fputs($fichier, 'X-WR-CALNAME:'.$this->calName);
       fputs($fichier, 'X-WR-TIMEZONE:'.$this->timeZone);
       foreach ($this->arrayEvent as $value) {
-        $value->print($fichier);
+        $value->outputicsFile($fichier);
       }
       fputs($fichier, 'END:VCALENDAR');
   }
