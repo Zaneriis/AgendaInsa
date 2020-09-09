@@ -9,3 +9,33 @@
 .horaire {
   margin-top: -5px;
 }
+
+.col-event {
+  overflow: hidden;
+}
+
+@media (min-width: 992px) {
+  .outer-col {
+    width: 20% !important;
+  }
+}
+
+@media (max-width: 992px) {
+  .espace-rows {
+    margin-bottom: 5%;
+  }
+
+  .titre-jour {
+    font-size: 40px;
+  }
+}
+
+.bordered {
+    -webkit-box-shadow:inset 0px 0px 0px 2px #eeeeee;
+    -moz-box-shadow:inset 0px 0px 0px 2px #eeeeee;
+    box-shadow:inset 0px 0px 0px 2px #eeeeee;
+}
+
+.event-comment {
+  height: 100%;
+}

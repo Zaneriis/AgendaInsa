@@ -1,4 +1,5 @@
 <?php
+
 require_once('Jour.php');
   /**
    *
@@ -38,9 +39,24 @@ require_once('Jour.php');
     }
 
     public function vue(){
-      foreach ($this->listJours as $value) {
-        $value->vue();
+      $plages = getPlages();
+
+      echo "<div class='row'>";
+
+      if (count($this->listJours) == 1) {
+        echo "<div class='col s4 offset-s4'>";
+        ($this->listJours[0])->vue();
+        echo "</div>";
       }
+      else {
+        foreach ($this->listJours as $value) {
+          echo "<div class='outer-col col s12 bordered'>";
+          $value->vue();
+          echo "</div>";
+        }
+      }
+
+      echo "</div>";
     }
 
     /*private funciton genererPeriode(){

@@ -1,5 +1,100 @@
 <?php
+  define("BASE_DE_DONNEES", "/bd2 /");
+  define("REUNION", "/Reunion/");
+  define("GESTION_STRATEGIE_FINANCE","/Gestion Strategie Finance/");
+  define("TRAITEMENT_INFORMATION","/tim/");
+  define("TRAITEMENT_IMAGE","/ti /");
+  define("ESPAGNOL","/Espagnol /");
+  define("RECHERCHE_OPERATIONELLE","/ro /");
+  define("ALLEMAND","/Allemand /");
+  define("ANGLAIS","/Anglais /");
+  define("FRANCAISE_LANGUE_ETRANGERE","/Fle /");
+  define("METHODE_GESTION_PROJET","/mgpi /");
+  define("RESEAU","/ri /");
 
+  function getCouleur($event) {
+
+
+
+    if (preg_match(BASE_DE_DONNEES, $event->comment)) {
+      $couleur = "brown";
+    }
+    elseif (preg_match(REUNION, $event->comment)) {
+      $couleur = "pink";
+    }
+
+    elseif (preg_match(GESTION_STRATEGIE_FINANCE, $event->comment)) {
+      $couleur = "purple";
+    }
+    elseif (preg_match(TRAITEMENT_IMAGE, $event->comment)) {
+      $couleur = "amber";
+    }/*
+    elseif (preg_match(TRAITEMENT_INFORMATION, $event->comment)) {
+      $couleur = "deep-purple";
+    }
+    elseif (preg_match(ESPAGNOL, $event->comment)) {
+      $couleur = "indigo";
+    }
+    elseif (preg_match(RECHERCHE_OPERATIONELLE, $event->comment)) {
+      $couleur = "blue";
+    }
+    elseif (preg_match(ALLEMAND, $event->comment)) {
+      $couleur = "teal";
+    }
+    elseif (preg_match(ANGLAIS, $event->comment)) {
+      $couleur = "green";
+    }
+    elseif (preg_match(FRANCAISE_LANGUE_ETRANGERE, $event->comment)) {
+      $couleur = "light-green";
+    }
+    elseif (preg_match(METHODE_GESTION_PROJET, $event->comment)) {
+      $couleur = "lime";
+    }*/
+    elseif (preg_match(RESEAU, $event->comment)) {
+      $couleur = "yellow";
+    }
+    else {
+      $couleur = couleurRandom();
+    }
+
+    return array("$couleur lighten-3", "$couleur lighten-2");
+
+  }
+
+  function couleurRandom() {
+    static $compteur = 0;
+
+    $couleurs = array("red","pink","purple","deep-purple","indigo","blue","teal","green","light-green","lime","yellow","amber","orange","deep-orange","brown");
+
+    $couleur = $couleurs[$compteur];
+
+
+    $compteur++;
+
+    if ($compteur >= sizeof($couleurs)) {
+      $compteur = 0;
+    }
+
+    return $couleur;
+  }
+  /*
+  function getCouleur($event) {
+    static $compteur = 0;
+
+    $couleurs = array("red","pink","purple","deep-purple","indigo","blue","teal","green","light-green","lime","yellow","amber","orange","deep-orange","brown");
+
+    $couleur = $couleurs[$compteur];
+
+
+    $compteur++;
+
+    if ($compteur >= sizeof($couleurs)) {
+      $compteur = 0;
+    }
+
+    return array("$couleur lighten-3", "$couleur lighten-2");
+
+  }*/
   function putEventInPlage(&$tableauPlages, $event) {
     $limitesHorairesEvent = array_map('trim', explode("-",$event->time));
 
@@ -24,23 +119,7 @@
     return "row-event";
   }
 
-  function getCouleur() {
-    static $compteur = 0;
 
-    $couleurs = array("red lighten-3","pink lighten-3","purple lighten-3","deep-purple lighten-3","indigo lighten-3","blue lighten-3","teal lighten-3","green lighten-3","light-green lighten-3","lime lighten-3","yellow lighten-3","amber lighten-3","orange lighten-3","deep-orange lighten-3","brown lighten-3");
-
-    $couleur = $couleurs[$compteur];
-
-
-    $compteur++;
-
-    if ($compteur >= sizeof($couleurs)) {
-      $compteur = 0;
-    }
-
-    return $couleur;
-
-  }
 
   function nombrePlagesEvenement($event) {
     $limitesHorairesEvent = array_map('trim', explode("-",$event->time));
@@ -63,10 +142,21 @@
 
     foreach ($evenements as $event) {
 
+      list ($couleurPrincipale, $couleurSecondaire) = getCouleur($event);
+
       $nbplages = nombrePlagesEvenement($event);
       $tailleEvenement = 2 * $nbplages ;
-      echo "<div class='col-event col s".(12/(count($evenements)))." $event->couleur' style='min-height:".$tailleEvenement."vh;'>";
-        echo $event->comment;
+      echo "<div data-position='bottom' data-tooltip='$event->comment ($event->time)' class=' tooltipped col-event col s".(12/(count($evenements)))."' style='height:".$tailleEvenement."vh;'>";
+        echo "<div class='row center-align $couleurSecondaire'><div class='col s12'>";
+          echo $event->time;
+        echo "</div></div>";
+        echo "<div class='row event-comment $couleurPrincipale'><div class='col s12'>";
+          echo $event->comment;
+        echo "</div></div>";
+
+
+
+
       echo "</div>";
 
     }
@@ -76,12 +166,27 @@
 
   }
 
+  function getPlages() {
+
+    $period = new DatePeriod(new DateTime('08:00'), new DateInterval('PT15M'), new DateTime('20:00'));
+
+    $plages = array();
+
+    foreach ($period as $hour) {
+      $plages[$hour->format("H:i")] = array();
+    }
+
+    return $plages;
+  }
+
 
   /**
    *
    */
   class Jour
   {
+
+
     private $label;
     private $evenements;
     function __construct($data, $label)
@@ -98,21 +203,30 @@
     }
 
     function vue(){
-
-        $period = new DatePeriod(new DateTime('08:00'), new DateInterval('PT15M'), new DateTime('20:00'));
-
-        $plages = array();
-
-        foreach ($period as $hour) {
-          $plages[$hour->format("H:i")] = array();
-        }
+        $plages = getPlages();
 
         foreach ($this->getEvenements() as $event) {
-          $event->couleur = getCouleur();
           putEventInPlage($plages, $event);
         }
 
-        include("./vue/jour.php");
+        echo "<div class='row center-align bordered titre-jour'>";
+        echo $this->getNom();
+        echo "</div>";
+
+        $previousEvents = NULL;
+
+        foreach ($plages as $heure => $evenements) {
+
+          if ((is_null($previousEvents) or !($evenements == $previousEvents)) and !(empty($evenements))) {
+            afficherEvent($evenements);
+          }
+          elseif (empty($evenements)){
+            afficherPause();
+          }
+
+          $previousEvents = $plages[$heure];
+
+        }
     }
 
     function getNom(){
