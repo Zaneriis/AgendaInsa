@@ -9,7 +9,7 @@
 	$o = $o->setStart('20200910100000')->setEnd('20200910110000')->setSummary('Francais')->setDescription('Francais');
 	$a->setCalName('LEOPACARYTEST')->addEvent($o);
 
-	$monfichier = fopen('test.ics', 'a+');
+	$monfichier = fopen('test.ics', 'w');
 
 	$a->outputicsFile($monfichier);
 

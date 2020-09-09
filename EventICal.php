@@ -39,12 +39,17 @@ class EventICal
   }
 
   public function outputicsFile($fichier){
+    date_default_timezone_set('UTC');
     fputs($fichier, 'BEGIN:VEVENT'.'
 ');
     fputs($fichier, 'DTSTART:'.date('Ymd\This',$this->dtStart).'Z
 ');
     fputs($fichier, 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z
 ');
+echo 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z
+';
+echo 'DTSTART:'.date('Ymd\This',$this->dtStart).'Z
+';
     fputs($fichier, 'SUMMARY:'.$this->summary.'
 ');
     fputs($fichier, 'DESCRIPTION:'.$this->description.'
