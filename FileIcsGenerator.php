@@ -38,13 +38,19 @@ class FileIcsGenerator
   }
 
   public function outputicsFile($fichier){
-      fputs($fichier, 'BEGIN:VCALENDAR');
-      fputs($fichier, 'PRODID:-//Serveur de planning Cocktail 0.9//iCal4j 1.0');
+      fputs($fichier, 'BEGIN:VCALENDAR
+');
+      fputs($fichier, 'PRODID:-//Serveur de planning Cocktail 0.9//iCal4j 1.0
+');
       fputs($fichier, 'VERSION:2.0');
-      fputs($fichier, 'CALSCALE:'.$this->calScale);
-      fputs($fichier, 'METHOD:PUBLISH');
-      fputs($fichier, 'X-WR-CALNAME:'.$this->calName);
-      fputs($fichier, 'X-WR-TIMEZONE:'.$this->timeZone);
+      fputs($fichier, 'CALSCALE:'.$this->calScale.'
+');
+      fputs($fichier, 'METHOD:PUBLISH'.'
+');
+      fputs($fichier, 'X-WR-CALNAME:'.$this->calName.'
+');
+      fputs($fichier, 'X-WR-TIMEZONE:'.$this->timeZone.'
+');
       foreach ($this->arrayEvent as $value) {
         $value->outputicsFile($fichier);
       }

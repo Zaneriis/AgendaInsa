@@ -37,12 +37,18 @@ class EventICal
   }
 
   public function outputicsFile($fichier){
-    fputs($fichier, 'BEGIN:VEVENT');
-    fputs($fichier, 'DTSTART:'.date('Ymd\This',$this->dtStart).'Z');
-    fputs($fichier, 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z');
-    fputs($fichier, 'SUMMARY:'.$this->summary);
-    fputs($fichier, 'DESCRIPTION:'.$this->description);
-    fputs($fichier, 'END:VEVENT');
+    fputs($fichier, 'BEGIN:VEVENT'.'
+');
+    fputs($fichier, 'DTSTART:'.date('Ymd\This',$this->dtStart).'Z
+');
+    fputs($fichier, 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z
+');
+    fputs($fichier, 'SUMMARY:'.$this->summary.'
+');
+    fputs($fichier, 'DESCRIPTION:'.$this->description.'
+');
+    fputs($fichier, 'END:VEVENT'.'
+');
     // echo $this->dtStart;
     // echo $this->dtEnd;
     // echo $this->summary;
