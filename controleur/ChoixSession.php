@@ -38,6 +38,10 @@
     public function getData(){
       return $this->arrayNomNumero;
     }
+
+    public function getFormations(){
+      return array("ASI Semestre 5", "ASI Semestre 6", "ASI Semestre 7", "GM", "Esigelec");
+    }
   }
 
 ?>

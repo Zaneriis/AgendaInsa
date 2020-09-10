@@ -1,4 +1,9 @@
 .container {
   width: 90% !important;
   max-width: none;
+  background-color: white;
+}
+
+body {
+  background-color: #eeeeee;
 }
