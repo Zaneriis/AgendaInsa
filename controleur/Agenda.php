@@ -25,12 +25,14 @@ require_once('Jour.php');
     }
 
     private function loadEvent(){
-      $url = 'http://api.pacary.net/AgendaInsaRouen/index.php?fo='.$this->formation.'&ty='.$this->getType().'&ts='.$this->getInsaTime();
+      /*$url = 'http://api.pacary.net/AgendaInsaRouen/index.php?fo='.$this->formation.'&ty='.$this->getType().'&ts='.$this->getInsaTime();
       if($this->session !== FALSE){
         $url = $url.'&ss='.intval($this->session);
-      }
+      }*/
+      $url = "http://51.75.253.173/AgendaInsa/index.json";
       $json = file_get_contents($url);
       $this->data = json_decode($json);
+
 
       foreach ($this->data as $key => $value) {
         array_push($this->listJours, new Jour($value,$key));
