@@ -11,9 +11,12 @@ require_once('Jour.php');
     private $data;
     private $listJours;
     private $session;
-    public function __construct($time = FALSE, $type = 'week', $session = FALSE)
+    private $formation;
+    public function __construct($time = FALSE, $type = 'week', $session = FALSE, $formation = FALSE)
     {
+      if($formation === FALSE) $formation = "2020-ING-ASI-S7";
       if($time === FALSE) $time = time();
+      $this->formation = $formation;
       $this->time = $time;
       $this->type = $type;
       $this->session = $session;
@@ -22,7 +25,7 @@ require_once('Jour.php');
     }
 
     private function loadEvent(){
-      $url = 'http://api.pacary.net/AgendaInsaRouen/index.php?fo=2020-ING-ASI-S7&ty='.$this->getType().'&ts='.$this->getInsaTime();
+      $url = 'http://api.pacary.net/AgendaInsaRouen/index.php?fo='.$this->formation.'&ty='.$this->getType().'&ts='.$this->getInsaTime();
       if($this->session !== FALSE){
         $url = $url.'&ss='.intval($this->session);
       }
