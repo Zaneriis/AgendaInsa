@@ -144,8 +144,24 @@
       }
 
     }
-
     return $eventLePlusTot;
+  }
+
+  function getEventLePlusTard($evenements) {
+    $heureLaPlusTard = strtotime("00:00:01");
+    $eventLePlusTard = $evenements[0];
+
+    foreach ($evenements as $event) {
+      list($debut, $fin) = getBornesEvent($event);
+
+      if (strtotime($fin) > $heureLaPlusTard) {
+        $heureLaPlusTard = strtotime($fin);
+        $eventLePlusTard = $event;
+      }
+
+    }
+
+    return $eventLePlusTard;
   }
 
   function afficherPause() {
@@ -283,6 +299,16 @@
       echo '</pre>';
     }
 
+    function afficherHeader() {
+
+        list($heureLaPlusTot, $osef) = getBornesEvent(getEventLePlusTot($this->getEvenements()));
+        list($osef, $heureLaPlusTard) = getBornesEvent(getEventLePlusTard($this->getEvenements()));
+
+        echo "<div class='row center-align bordered titre-jour'>";
+        echo $this->getNom()." <strong>($heureLaPlusTot - $heureLaPlusTard)</strong>";
+        echo "</div>";
+    }
+
     function vue(){
         $plages = getPlages();
 
@@ -290,9 +316,8 @@
           putEventInPlage($plages, $event);
         }
 
-        echo "<div class='row center-align bordered titre-jour'>";
-        echo $this->getNom();
-        echo "</div>";
+
+        $this->afficherHeader();
 
         $previousEvents = NULL;
 
