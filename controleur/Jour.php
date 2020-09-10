@@ -119,21 +119,58 @@
     return "row-event";
   }
 
-
+  function getBornesEvent($event) {
+    return array_map('trim', explode("-",$event->time));
+  }
 
   function nombrePlagesEvenement($event) {
-    $limitesHorairesEvent = array_map('trim', explode("-",$event->time));
 
-    $debutEvent = $limitesHorairesEvent[0];
-    $finEvent = $limitesHorairesEvent[1];
+    list($debutEvent, $finEvent) = getBornesEvent($event);
 
     return iterator_count(new DatePeriod(new DateTime($debutEvent), new DateInterval('PT15M'), new DateTime($finEvent)));
 
   }
 
+  function getEventLePlusTot($evenements) {
+    $heureLaPlusTot = strtotime("23:59:59");
+    $eventLePlusTot = $evenements[0];
+
+    foreach ($evenements as $event) {
+      list($debut, $fin) = getBornesEvent($event);
+
+      if (strtotime($debut) < $heureLaPlusTot) {
+        $heureLaPlusTot = strtotime($debut);
+        $eventLePlusTot = $event;
+      }
+
+    }
+
+    return $eventLePlusTot;
+  }
+
   function afficherPause() {
     echo "<div class='row no-mb' style='height: 2vh'>";
     echo "</div>";
+  }
+
+  function afficherPauseSiBesoin($event, $evenements) {
+    $eventLePlusTot = getEventLePlusTot($evenements);
+    list($debutEventTot, $finEventTot) = getBornesEvent($eventLePlusTot);
+    list($debutEvent, $finEvent) = getBornesEvent($event);
+
+    //echo "eventleplustot : $debutEventTot";
+    //echo "event : $debutEvent";
+
+    if (!($debutEventTot == $debutEvent)) {
+      //echo "c pas pareil faut des pauses";
+
+      $nbPauses = count(getPlages($heureDepart=$debutEventTot, $heureFin=$debutEvent));
+      //echo "nb pauses : $nbPauses";
+      for ($i=0; $i<$nbPauses; $i++) {
+        afficherPause();
+      }
+    }
+
   }
 
   function afficherEvent($evenements) {
@@ -142,22 +179,25 @@
 
     foreach ($evenements as $event) {
 
-      list ($couleurPrincipale, $couleurSecondaire) = getCouleur($event);
+      if (!property_exists($event, "estAffiche") or !$event->estAffiche) {
+        list ($couleurPrincipale, $couleurSecondaire) = getCouleur($event);
 
-      $nbplages = nombrePlagesEvenement($event);
-      $tailleEvenement = 2 * $nbplages ;
-      echo "<div data-position='bottom' data-tooltip='$event->comment ($event->time)' class=' tooltipped col-event col s".(12/(count($evenements)))."' style='height:".$tailleEvenement."vh;'>";
-        echo "<div class='row center-align $couleurSecondaire'><div class='col s12'>";
-          echo "<span class='heure_de_cours'>".$event->time."</span>";
-        echo "</div></div>";
-        echo "<div class='row event-comment $couleurPrincipale'><div class='col s12'>";
-          echo $event->comment;
-        echo "</div></div>";
+        afficherPauseSiBesoin($event, $evenements);
 
+        $nbplages = nombrePlagesEvenement($event);
+        $tailleEvenement = 2 * $nbplages ;
+        echo "<div data-position='bottom' data-tooltip='$event->comment ($event->time)' class=' tooltipped col-event col s".(12/count($evenements))."' style='height:".$tailleEvenement."vh;'>";
+          echo "<div class='row center-align $couleurSecondaire'><div class='col s12'>";
+            echo "<span class='heure_de_cours'>".$event->time."</span>";
+          echo "</div></div>";
+          echo "<div class='row event-comment $couleurPrincipale'><div class='col s12'>";
+            echo $event->comment;
+          echo "</div></div>";
 
+        echo "</div>";
 
-
-      echo "</div>";
+        $event->estAffiche = TRUE;
+      }
 
     }
 
@@ -166,9 +206,9 @@
 
   }
 
-  function getPlages() {
+  function getPlages($heureDepart="08:00", $heureFin="20:00", $interval="PT15M") {
 
-    $period = new DatePeriod(new DateTime('08:00'), new DateInterval('PT15M'), new DateTime('20:00'));
+    $period = new DatePeriod(new DateTime($heureDepart), new DateInterval($interval), new DateTime($heureFin));
 
     $plages = array();
 
@@ -177,6 +217,47 @@
     }
 
     return $plages;
+  }
+
+  function eventLePlusLong($evenements) {
+    $periodeMax = 0;
+    $eventLePlusLong = $evenements[0];
+
+    foreach ($evenements as $event) {
+
+      list($debutEvent, $finEvent) = getBornesEvent($event);
+      $time1 = strtotime($debutEvent);
+      $time2 = strtotime($finEvent);
+      $difference = round(abs($time2 - $time1) / 3600,2);
+
+      if ($difference >= $periodeMax) {
+        $periodeMax = $difference;
+        $eventLePlusLong = $event;
+      }
+
+    }
+
+    return $eventLePlusLong;
+  }
+
+  function eventsConcomitants($plages, $evenements) {
+
+    $eventLePlusLong = eventLePlusLong($evenements);
+
+    list($heureDebut, $heureFin) = getBornesEvent($eventLePlusLong);
+
+    $eventsTrouves = array();
+    $nouvellesPlages = getPlages($heureDepart=$heureDebut, $heureFin=$heureFin);
+
+    foreach (array_keys($nouvellesPlages) as $heureATester) {
+      foreach ($plages[$heureATester] as $event) {
+        if (!in_array($event, $eventsTrouves)) {
+          $eventsTrouves[] = $event;
+        }
+      }
+    }
+
+    return $eventsTrouves;
   }
 
 
@@ -215,9 +296,12 @@
 
         $previousEvents = NULL;
 
+
         foreach ($plages as $heure => $evenements) {
 
+
           if ((is_null($previousEvents) or !($evenements == $previousEvents)) and !(empty($evenements))) {
+            $evenements = eventsConcomitants($plages, $evenements);
             afficherEvent($evenements);
           }
           elseif (empty($evenements)){
