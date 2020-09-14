@@ -169,7 +169,10 @@
     echo "</div>";
   }
 
-  function afficherPauseSiBesoin($event, $evenements) {
+  function getNombrePlagesDecalage($event, $evenements) {
+    //pour calculer les pauses en fonction du décalage entre le début de l'évenement (1er paramètre) et le début
+    //du cours le plus tot dans la liste des évènements (2nd paramètre)
+
     $eventLePlusTot = getEventLePlusTot($evenements);
     list($debutEventTot, $finEventTot) = getBornesEvent($eventLePlusTot);
     list($debutEvent, $finEvent) = getBornesEvent($event);
@@ -179,13 +182,18 @@
 
     if (!($debutEventTot == $debutEvent)) {
       //echo "c pas pareil faut des pauses";
-
-      $nbPauses = count(getPlages($heureDepart=$debutEventTot, $heureFin=$debutEvent));
+      return count(getPlages($heureDepart=$debutEventTot, $heureFin=$debutEvent));
       //echo "nb pauses : $nbPauses";
+
+
+      /*
       for ($i=0; $i<$nbPauses; $i++) {
         afficherPause();
-      }
+      }*/
+
     }
+
+    return 0;
 
   }
 
@@ -195,20 +203,48 @@
 
     foreach ($evenements as $event) {
 
+
+
       if (!property_exists($event, "estAffiche") or !$event->estAffiche) {
         list ($couleurPrincipale, $couleurSecondaire) = getCouleur($event);
 
-        afficherPauseSiBesoin($event, $evenements);
+        if (count($evenements) == 5) { //division pas entiere avec 5 pose probleme quand il y a 5 cours en meme temps
+          $nbColonnes = 2;
+        } else {
+          $nbColonnes = (12/count($evenements));
+        }
+
+        $nombrePlagesDecalage = getNombrePlagesDecalage($event, $evenements);
+
+
 
         $nbplages = nombrePlagesEvenement($event);
-        $tailleEvenement = 2 * $nbplages ;
-        echo "<div data-position='bottom' data-tooltip='$event->comment ($event->time)' class=' tooltipped col-event col s".(12/count($evenements))."' style='height:".$tailleEvenement."vh;'>";
-          echo "<div class='row center-align $couleurSecondaire'><div class='col s12'>";
-            echo "<span class='heure_de_cours'>".$event->time."</span>";
+        $tailleEvenement = 2 * ($nbplages + $nombrePlagesDecalage);
+
+        echo "<div class='col-event col s$nbColonnes ' style='height:".$tailleEvenement."vh;'>";
+
+          if ($nombrePlagesDecalage != 0) {
+            echo "<div class='row'><div class='col s12'>";
+            for ($i=0; $i<$nombrePlagesDecalage; $i++) {
+              afficherPause();
+            }
+            echo "</div></div>";
+          }
+
+          echo "<div class='row'><div data-position='top' data-tooltip='$event->comment ($event->time)'  class='col s12 tooltipped' style='height: ".(2*$nbplages)."vh;'>";
+
+
+
+            echo "<div class='row center-align $couleurSecondaire'><div class='col s12'";
+              echo "<span class='heure_de_cours'>".$event->time."</span>";
+            echo "</div></div>";
+
+            echo "<div class='row $couleurPrincipale'><div class='col s12 event-comment'>";
+              echo $event->comment;
+            echo "</div></div>";
+
           echo "</div></div>";
-          echo "<div class='row event-comment $couleurPrincipale'><div class='col s12'>";
-            echo $event->comment;
-          echo "</div></div>";
+
 
         echo "</div>";
 
