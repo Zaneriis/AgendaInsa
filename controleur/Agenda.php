@@ -43,6 +43,40 @@ require_once('Jour.php');
       return date("Ymd",$this->getTime());
     }
 
+    public function periodeSuivant($type = "week"){
+      switch ($type) {
+        case 'day':
+          return $this->getTime() + 3600*24;
+          break;
+        case 'mouth':
+          return $this->getTime() + 3600*24 * intval(date("t",$this->getTime()));
+          break;
+        case 'year':
+          return $this->getTime() + 3600*24 * (365 + intval(date("L",$this->getTime())));
+          break;
+        default: // week
+          return $this->getTime() + 3600*24*7;
+          break;
+      }
+    }
+
+    public function periodePrecedente($type = "week"){
+      switch ($type) {
+        case 'day':
+          return $this->getTime() - 3600*24;
+          break;
+        case 'mouth':
+          return $this->getTime() - 3600*24 * intval(date("t",$this->getTime()));
+          break;
+        case 'year':
+          return $this->getTime() - 3600*24 * (365 + intval(date("L",$this->getTime())));
+          break;
+        default: // week
+          return $this->getTime() - 3600*24*7;
+          break;
+      }
+    }
+
     public function vue(){
       $plages = getPlages();
 
