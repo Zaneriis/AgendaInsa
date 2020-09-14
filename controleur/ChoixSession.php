@@ -3,26 +3,26 @@
   /**
    *
    */
- include('BDD.php');
   class ChoixSession
   {
     private $arrayNomNumero;
-    function __construct()
+    private $bdd;
+    function __construct($bdd)
     {
+      $this->bdd = $bdd;
     }
 
     public function getCompte($groupe = FALSE){
       $sql = "select id, identifiant from compte";
-      $bdd = new BDD();
       $res;
       if($groupe !== FALSE)
       {
           $sql=$sql.' where groupe = ?';
-          $cur = $bdd->prep($sql);
-          $res = $bdd->lirePrep($cur,array($groupe));
+          $cur = $this->bdd->prep($sql);
+          $res = $this->bdd->lirePrep($cur,array($groupe));
       }
       else {
-          $res = $bdd->lire($sql);
+          $res = $this->bdd->lire($sql);
       }
       $arrayReturn = array();
       foreach ($res as $value) {
@@ -40,7 +40,10 @@
     }
 
     public function getFormations(){
-      return array("ASI Semestre 5", "ASI Semestre 6", "ASI Semestre 7", "GM", "Esigelec");
+      $url = ""
+      $json = file_get_contents($url);
+      $this->data = json_decode($json);
+
     }
   }
 
