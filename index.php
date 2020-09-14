@@ -5,8 +5,23 @@ error_reporting(E_ALL);
 
 require_once("controleur/ChoixSession.php");
 require_once("controleur/Agenda.php");
+require_once("controleur/GestionnaireCookie.php");
 require_once("BDD.php");
-$session = new ChoixSession(new BDD());
+$choixSession = new ChoixSession(new BDD());
+
+$session = FALSE;
+$calendar = FALSE;
+$ts = time();
+
+$gestionnaireCookie = new GestionnaireCookie($_COOKIE);
+$session = $gestionnaireCookie->getSession();
+$calendar = $gestionnaireCookie->getCalendrier();
+if(isset($_GET['ts']) && !empty($_GET['ts'])){
+  $ts = htmlspecialchars($_GET['ts']);
+}
+// echo $ts.'<br />';
+// echo $session.'<br />';
+// echo $calendar.'<br />';
 ?>
 
 <html>
@@ -32,8 +47,7 @@ $session = new ChoixSession(new BDD());
         <!-- Dropdown Structure -->
     <ul id="dropdown1" class="dropdown-content">
       <?php
-
-        $formations = $session->getFormations();
+        $formations = $choixSession->getFormations();
         foreach ($formations as $formation) {
           echo "<li><a href='#!'>$formation</a></li>";
         }
@@ -62,27 +76,11 @@ $session = new ChoixSession(new BDD());
 
     <div class="container">
       <?php
-        $session = FALSE;
-        $formation = FALSE;
-        $ts = time();
-        if(isset($_GET['ss']) && !empty($_GET['ss'])){
-          $session = intval($_GET['ss']);
-        }
-        if(isset($_GET['fo']) && !empty($_GET['fo'])){
-          $formation = htmlspecialchars($_GET['fo']);
-        }
-        if(isset($_GET['ts']) && !empty($_GET['ts'])){
-          $ts = htmlspecialchars($_GET['ts']);
-        }
-        $agenda = new Agenda($ts,"week",$session,$formation);
+        $agenda = new Agenda($ts,"week",$session,$calendar);
         $agenda->vue();
       ?>
     </div>
 
     <script src="vue/js/index.js"></script>
-
-
-
-
   </body>
 </html>
