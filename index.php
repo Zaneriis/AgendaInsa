@@ -76,7 +76,7 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
 
     <div class="container">
       <?php
-        $agenda = new Agenda($ts,"week",$session,$calendar);
+        $agenda = new Agenda($ts-86000,"week",$session,$calendar);
         $agenda->vue();
       ?>
     </div>
