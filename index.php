@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 
 require_once("controleur/ChoixSession.php");
 require_once("controleur/Agenda.php");
-require_once("BDD.php")
+require_once("BDD.php");
 $session = new ChoixSession(new BDD());
 ?>
 
