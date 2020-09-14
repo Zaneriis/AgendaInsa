@@ -50,7 +50,22 @@ $session = new ChoixSession(new BDD());
     </ul>
 
     <div class="container">
-      <?php include("tableau.php")?>
+      <?php
+        $session = FALSE;
+        $formation = FALSE;
+        $ts = time();
+        if(isset($_GET['ss']) && !empty($_GET['ss'])){
+          $session = intval($_GET['ss']);
+        }
+        if(isset($_GET['fo']) && !empty($_GET['fo'])){
+          $formation = htmlspecialchars($_GET['fo']);
+        }
+        if(isset($_GET['ts']) && !empty($_GET['ts'])){
+          $ts = htmlspecialchars($_GET['ts']);
+        }
+        $agenda = new Agenda($ts,"week",$session,$formation);
+        $agenda->vue();
+      ?>
     </div>
 
     <script src="vue/js/index.js"></script>
