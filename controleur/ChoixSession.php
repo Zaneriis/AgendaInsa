@@ -42,7 +42,7 @@
     public function getFormations(){
       $url = "http://api.pacary.net/AgendaInsaRouen/getAgendas.php";
       $json = file_get_contents($url);
-      return json_decode($json);
+      return json_decode($json, true);
 
     }
   }

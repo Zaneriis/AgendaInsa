@@ -44,34 +44,39 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
   </head>
 
   <body>
-        <!-- Dropdown Structure -->
-    <ul id="dropdown1" class="dropdown-content">
-      <?php
-        $formations = $choixSession->getFormations();
-        foreach ($formations as $formation) {
-          echo "<li><a href='#!'>$formation</a></li>";
-        }
-      ?>
-    </ul>
 
     <!-- barre navigation normale -->
     <nav>
       <div class="nav-wrapper">
-        <a href="#!" class="brand-logo">Agenda Insa Rouen - made in Dr.Dévé</a>
+        <a href="#!" class="brand-logo">Ca ne me rendra pas jambe mieux faite</a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
-          <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Formation<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
+
         </ul>
       </div>
     </nav>
 
+    <div id="modal1" class="modal">
+      <div class="modal-content" style="height: 50vh;">
+        <h4>Choisir ma formation</h4>
+        <div class="row">
+        <div class="input-field col s12">
+          <i class="material-icons prefix">textsms</i>
+          <input type="text" id="autocomplete-input" class="autocomplete">
+          <label for="autocomplete-input">Autocomplete</label>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" id="validation-formation" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+
     <!-- menu quand fenetre raccourcie -->
     <ul class="sidenav" id="mobile-demo">
-      <li><a href="sass.html">Sass</a></li>
-      <li><a href="badges.html">Components</a></li>
-      <li><a href="collapsible.html">Javascript</a></li>
-      <li><a href="mobile.html">Mobile</a></li>
+      <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a>
     </ul>
 
     <div class="container">
