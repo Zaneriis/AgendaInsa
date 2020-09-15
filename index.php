@@ -64,7 +64,7 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
         <div class="row">
         <div class="input-field col s12">
           <i class="material-icons prefix">textsms</i>
-          <input type="text" id="autocomplete-input" class="autocomplete">
+          <input type="text" id="autocomplete-input" class="autocomplete" autocomplete="off">
           <label for="autocomplete-input">Autocomplete</label>
         </div>
       </div>
