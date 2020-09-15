@@ -82,5 +82,6 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
     </div>
 
     <script src="vue/js/index.js"></script>
+    <script src="vue/js/buttonScroll.js"></script>
   </body>
 </html>

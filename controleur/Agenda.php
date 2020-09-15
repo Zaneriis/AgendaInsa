@@ -89,10 +89,12 @@ require_once('Jour.php');
         echo "</div>";
       }
       else {
+        $i = 1;
         foreach ($this->listJours as $value) {
-          echo "<div class='outer-col col s12 bordered'>";
+          echo "<div class='outer-col col s12 bordered' id='ancre_custom_".$i."'>";
           $value->vue();
           echo "</div>";
+          $i++;
         }
       }
 
