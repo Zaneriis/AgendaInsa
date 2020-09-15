@@ -37,10 +37,22 @@ class FileIcsGenerator
     return $this;
   }
 
+  // $date = "YYYYMMDD"
+  public static function proxyEvent($eventAgenda, $date){
+    $o = new EventICal();
+    $jour = date("Ymd",strtotime(ManipulateurDate::FrenshTextToEnglish($date)));
+    $heure = $eventAgenda->time;
+    $heures = explode(" - ",$heure);
+    $debut = $jour.implode("",explode(":",$heures[0]))."00";
+    $fin = $jour.implode("",explode(":",$heures[1]))."00";
+    $o = $o->setStart($debut)->setEnd($fin)->setSummary($eventAgenda->comment)->setDescription($eventAgenda->comment);
+    return $o;
+  }
+
   public function outputicsFile($fichier){
       fputs($fichier, 'BEGIN:VCALENDAR
 ');
-      fputs($fichier, 'PRODID:-//Serveur de planning Cocktail 0.9//iCal4j 1.0
+      fputs($fichier, 'PRODID:-//Serveur de Léo Pacary//
 ');
       fputs($fichier, 'VERSION:2.0');
       fputs($fichier, 'CALSCALE:'.$this->calScale.'

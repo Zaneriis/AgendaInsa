@@ -63,8 +63,8 @@ class ManipulateurDate
 
   public static function FrenshMouthToEnglish($text){
     switch ($text) {
-      case 'January':
-        return "Monday";
+      case 'Janvier':
+        return "January";
         break;
       case 'Février':
         return "February";

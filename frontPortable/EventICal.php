@@ -21,8 +21,6 @@ class EventICal
 
   public function setStart($data){
     $this->dtStart = FrStringToTimeStamp($data);
-    echo $data;
-    echo '<br />';
     return $this;
   }
   public function setEnd($data){
@@ -46,10 +44,6 @@ class EventICal
 ');
     fputs($fichier, 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z
 ');
-echo 'DTEND:'.date('Ymd\This',$this->dtEnd).'Z
-';
-echo 'DTSTART:'.date('Ymd\This',$this->dtStart).'Z
-';
     fputs($fichier, 'SUMMARY:'.$this->summary.'
 ');
     fputs($fichier, 'DESCRIPTION:'.$this->description.'
