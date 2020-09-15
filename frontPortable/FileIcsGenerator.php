@@ -40,7 +40,7 @@ class FileIcsGenerator
   // $date = "YYYYMMDD"
   public static function proxyEvent($eventAgenda, $date){
     $o = new EventICal();
-    $jour = date("Ymd",strtotime(ManipulateurDate::FrenshDayToEnglish($date)));
+    $jour = date("Ymd",strtotime(ManipulateurDate::FrenshTextToEnglish($date)));
     $heure = $eventAgenda->time;
     $heures = explode(" - ",$heure);
     $debut = $jour.implode("",explode(":",$heures[0]))."00";

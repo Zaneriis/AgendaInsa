@@ -17,14 +17,20 @@ if(isset($_GET['fo']) && !empty($_GET['fo'])){
   if($data == NULL) exit(0);
   $a = new FileIcsGenerator();
   $a->setCalName($calName);
+  echo '<pre>';
+
   foreach ($data as $key => $value) {
     foreach ($value as $subkey => $subvalue) {
-      $a->addEvent(FileIcsGenerator::proxyEvent($subvalue,$subkey));
+      $event = FileIcsGenerator::proxyEvent($subvalue,$key);
+      print_r($event);
+      $a->addEvent($event);
     }
   }
-  $monfichier = fopen("ics/".$calName.'.ics', 'w');
-  $a->outputicsFile($monfichier);
-  header('Location:ics/'.$calName.'.ics');
+  echo '</pre>';
+
+  // $monfichier = fopen("ics/".$calName.'.ics', 'w');
+  // $a->outputicsFile($monfichier);
+  // header('Location:ics/'.$calName.'.ics');
 }
 
 ?>
