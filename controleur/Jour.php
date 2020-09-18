@@ -119,10 +119,6 @@
     return "row-event";
   }
 
-  function getBornesEvent($event) {
-    return array_map('trim', explode("-",$event->time));
-  }
-
   function nombrePlagesEvenement($event) {
 
     list($debutEvent, $finEvent) = getBornesEvent($event);
@@ -131,38 +127,7 @@
 
   }
 
-  function getEventLePlusTot($evenements) {
-    $heureLaPlusTot = strtotime("23:59:59");
-    $eventLePlusTot = $evenements[0];
 
-    foreach ($evenements as $event) {
-      list($debut, $fin) = getBornesEvent($event);
-
-      if (strtotime($debut) < $heureLaPlusTot) {
-        $heureLaPlusTot = strtotime($debut);
-        $eventLePlusTot = $event;
-      }
-
-    }
-    return $eventLePlusTot;
-  }
-
-  function getEventLePlusTard($evenements) {
-    $heureLaPlusTard = strtotime("00:00:01");
-    $eventLePlusTard = $evenements[0];
-
-    foreach ($evenements as $event) {
-      list($debut, $fin) = getBornesEvent($event);
-
-      if (strtotime($fin) > $heureLaPlusTard) {
-        $heureLaPlusTard = strtotime($fin);
-        $eventLePlusTard = $event;
-      }
-
-    }
-
-    return $eventLePlusTard;
-  }
 
   function afficherPause() {
     echo "<div class='row no-mb' style='height: 2vh'>";
@@ -258,18 +223,7 @@
 
   }
 
-  function getPlages($heureDepart="08:00", $heureFin="20:00", $interval="PT15M") {
 
-    $period = new DatePeriod(new DateTime($heureDepart), new DateInterval($interval), new DateTime($heureFin));
-
-    $plages = array();
-
-    foreach ($period as $hour) {
-      $plages[$hour->format("H:i")] = array();
-    }
-
-    return $plages;
-  }
 
   function eventLePlusLong($evenements) {
     $periodeMax = 0;
@@ -313,19 +267,93 @@
   }
 
 
+  function getPlages($heureDepart=NULL, $heureFin=NULL, $interval=NULL) {
+
+    if (is_null($heureDepart)) {
+      $heureDepart = new DateTime("08:00");
+    }
+    if (is_null($heureFin)) {
+      $heureFin = new DateTime("20:00");
+    }
+    if (is_null($interval)) {
+      $interval = new DateInterval("PT15M");
+    }
+
+    $period = new DatePeriod($heureDepart, $interval, $heureFin);
+
+    $plages = array();
+
+    foreach ($period as $hour) {
+      $plages[$hour->format("H:i")] = array();
+    }
+
+    return $plages;
+  }
   /**
    *
    */
   class Jour
   {
 
+    private $heureDebutPremierePlage;
+    private $heureDebutDernierePlage;
+    private $tempsPlage;
+    private $hauteurPlageValeur;
+    private $hauterPlageUnite;
 
     private $label;
     private $evenements;
+
     function __construct($data, $label)
     {
+      $this->heureDebutPremierePlage = new DateTime("08:00");
+      $this->heureDebutDernierePlage = new DateTime("20:00");
+      $this->tempsPlage = new DateInterval("PT15M");
+      $this->hauteurPlageValeur = 2;
+      $this->hauteurPlageUnite = "vh";
+
       $this->label =  $label;
       $this->evenements = $data;
+    }
+
+    function getBornesEvent($event) {
+      $bornes = array_map('trim', explode("-",$event->time));
+      return array(new DateTime($bornes[0]), new DateTime($bornes[1]));
+    }
+
+    function getTaillePlage($multiplicite) {
+      return ($multiplicite*$this->hauteurPlageValeur).$this->hauteurPlageUnite;
+    }
+
+    function getEventLePlusTot($evenements) {
+      $heureLaPlusTot = new DateTime("23:59:59");
+      $eventLePlusTot = $evenements[0];
+
+      foreach ($evenements as $event) {
+        list($debut, $fin) = $this->getBornesEvent($event);
+
+        if ($debut < $heureLaPlusTot) {
+          $heureLaPlusTot = $debut;
+          $eventLePlusTot = $event;
+        }
+
+      }
+      return $eventLePlusTot;
+    }
+
+    function getEventLePlusTard($evenements) {
+      $heureLaPlusTard = new DateTime("00:00:01");
+      $eventLePlusTard = $evenements[0];
+
+      foreach ($evenements as $event) {
+        list($debut, $fin) = $this->getBornesEvent($event);
+
+        if ($fin > $heureLaPlusTard) {
+          $heureLaPlusTard = $fin;
+          $eventLePlusTard = $event;
+        }
+      }
+      return $eventLePlusTard;
     }
 
     function vuePrint(){
@@ -335,43 +363,110 @@
       echo '</pre>';
     }
 
+    function coursAffichables($listeCours) {
+        foreach ($listeCours as $cours) {
+          if (!$cours->estAffiche) {
+            return TRUE;
+          }
+        }
+        return FALSE;
+    }
+
+    function plageAffichable($prochainePlage, $plages) {
+        if ($this->coursAffichables($plages[$prochainePlage->format("H:i")]) || empty($plages[$prochainePlage->format("H:i")])) {
+          return TRUE;
+        }
+        return FALSE;
+
+    }
+
+    function afficherPause($prochainePlage) {
+        echo "<div class='row' style='height: ".$this->getTaillePlage(1).";'><span>Pause</span></div>";
+        return $prochainePlage->add($this->tempsPlage);
+    }
+
+    function getBlocEvenements($prochainePlage, $plages) {
+
+        $tousLesEvents = $plages[$prochainePlage->format("H:i")];
+
+        while ($prochainePlage < $this->getBornesEvent($this->getEventLePlusTard($tousLesEvents))[1]) {
+
+          foreach ($plages[$prochainePlage->format("H:i")] as $event) {
+            if (!in_array($event, $tousLesEvents)) {
+                array_push($tousLesEvents, $event);
+            }
+          }
+
+          $prochainePlage->add($this->tempsPlage);
+        }
+
+        return $tousLesEvents;
+    }
+
+    function afficherBlocCours($prochainePlage, $plages) {
+      $evenementsDuBloc = $this->getBlocEvenements($prochainePlage, $plages);
+
+      echo "<br>--------";
+      foreach ($evenementsDuBloc as $event) {
+        $event->estAffiche = TRUE;
+        echo "<br>".$event->comment." ".($event->estAffiche ? 'true' : 'false');
+
+      }
+      echo "<br>---------";
+
+      return $this->getBornesEvent($this->getEventLePlusTard($evenementsDuBloc))[1];
+    }
+
     function afficherHeader() {
 
-        list($heureLaPlusTot, $osef) = getBornesEvent(getEventLePlusTot($this->getEvenements()));
-        list($osef, $heureLaPlusTard) = getBornesEvent(getEventLePlusTard($this->getEvenements()));
+        list($heureLaPlusTot, $osef) = $this->getBornesEvent($this->getEventLePlusTot($this->getEvenements()));
+        list($osef, $heureLaPlusTard) = $this->getBornesEvent($this->getEventLePlusTard($this->getEvenements()));
 
         echo "<div class='row center-align bordered titre-jour'>";
-        echo $this->getNom()." <strong>($heureLaPlusTot - $heureLaPlusTard)</strong>";
+        echo $this->getNom()." <strong>(".$heureLaPlusTot->format("H:i")." - ".$heureLaPlusTard->format("H:i").")</strong>";
         echo "</div>";
+    }
+
+    function afficherPlanning($plages) {
+      $prochainePlage = $this->heureDebutPremierePlage;
+
+      do {
+
+        if ($this->plageAffichable($prochainePlage, $plages)) {
+          //echo "<br>affichage de la plage : ".$prochainePlage->format("H:i");
+
+          /*
+          echo "<pre>";
+          //print_r($plages);
+
+          //print_r($plages[$prochainePlage->format("H:i")]);
+          echo "</pre>";*/
+
+          if(empty($plages[$prochainePlage->format("H:i")])) {
+            $prochainePlage = $this->afficherPause($prochainePlage);
+          }
+          else {
+            $prochainePlage = $this->afficherBlocCours($prochainePlage, $plages);
+          }
+
+        }
+        else {
+          $prochainePlage->add($this->tempsPlage);
+        }
+
+      } while($prochainePlage < $this->heureDebutDernierePlage);
     }
 
     function vue(){
         $plages = getPlages();
 
         foreach ($this->getEvenements() as $event) {
+          $event->estAffiche = FALSE;
           putEventInPlage($plages, $event);
         }
 
-
         $this->afficherHeader();
-
-        $previousEvents = NULL;
-
-
-        foreach ($plages as $heure => $evenements) {
-
-
-          if ((is_null($previousEvents) or !($evenements == $previousEvents)) and !(empty($evenements))) {
-            $evenements = eventsConcomitants($plages, $evenements);
-            afficherEvent($evenements);
-          }
-          elseif (empty($evenements)){
-            afficherPause();
-          }
-
-          $previousEvents = $plages[$heure];
-
-        }
+        $this->afficherPlanning($plages);
     }
 
     function getNom(){
