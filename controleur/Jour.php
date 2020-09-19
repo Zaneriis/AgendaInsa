@@ -403,16 +403,68 @@
         return $tousLesEvents;
     }
 
+    function insererEvent(&$tableauDeTableaux, $event) {
+
+      list($hDebut, $hFin) = $this->getBornesEvent($event);
+
+      foreach ($tableauDeTableaux as $index => $colonne) {
+
+        list($hDebutTard, $hFinTard) = $this->getBornesEvent($this->getEventLePlusTard($colonne));
+
+        if($hDebut > $hFinTard) { // peut etre >= je sais pas
+          /*echo "---- ajout de <br>$event->comment<br>";
+          echo "<br> à <br>";
+          echo "<pre>";
+          print_r($tableauDeTableaux);
+          echo "</pre>";
+          echo "<br>-----";*/
+          array_push($tableauDeTableaux[$index], $event);
+
+          /*echo "<br>----- résultat après insertion";
+          echo "<pre>";
+          print_r($tableauDeTableaux);
+          echo "</pre>";
+          echo "<br>-----";
+          */
+          return TRUE;
+        }
+      }
+
+      return FALSE;
+    }
+
+    function trierEvenementsBloc($evenements) {
+      $tableauDeTableaux = array();
+
+      foreach ($evenements as $event) {
+
+        $insertionReussie = $this->insererEvent($tableauDeTableaux, $event);
+
+        if (!$insertionReussie) {
+          $nouveauTableau = array($event);
+          array_push($tableauDeTableaux, $nouveauTableau);
+        }
+      }
+
+      return $tableauDeTableaux;
+    }
+
     function afficherBlocCours($prochainePlage, $plages) {
       $evenementsDuBloc = $this->getBlocEvenements($prochainePlage, $plages);
+      $colonnes = $this->trierEvenementsBloc($evenementsDuBloc);
 
-      echo "<br>--------";
-      foreach ($evenementsDuBloc as $event) {
-        $event->estAffiche = TRUE;
-        echo "<br>".$event->comment." ".($event->estAffiche ? 'true' : 'false');
+      echo "<div class'row'>";
+      foreach ($colonnes as $nbColonne => $colonne) {
+
+        echo "<div class'column' style='float: left; width: ".(100/count($colonnes))."%;'>";
+        foreach ($colonne as $event) {
+          echo $event->comment;
+          $event->estAffiche = TRUE;
+        }
+        echo "</div>";
 
       }
-      echo "<br>---------";
+      echo "</div>";
 
       return $this->getBornesEvent($this->getEventLePlusTard($evenementsDuBloc))[1];
     }
@@ -433,14 +485,6 @@
       do {
 
         if ($this->plageAffichable($prochainePlage, $plages)) {
-          //echo "<br>affichage de la plage : ".$prochainePlage->format("H:i");
-
-          /*
-          echo "<pre>";
-          //print_r($plages);
-
-          //print_r($plages[$prochainePlage->format("H:i")]);
-          echo "</pre>";*/
 
           if(empty($plages[$prochainePlage->format("H:i")])) {
             $prochainePlage = $this->afficherPause($prochainePlage);
@@ -467,6 +511,8 @@
 
         $this->afficherHeader();
         $this->afficherPlanning($plages);
+
+
     }
 
     function getNom(){
