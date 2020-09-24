@@ -1,50 +1,21 @@
 .row {
     margin-bottom: 0 !important;
-}
-
-.row-heure {
-  padding-left: 10%;
-}
-
-.horaire {
-  margin-top: -5px;
+    margin-left: 0 !important;
+    margin-right: -1px !important;
 }
 
 .col-event {
   overflow: hidden;
+  display: inherit;
+}
+
+.col {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 @media (min-width: 992px) {
   .outer-col {
     width: 20% !important;
   }
-}
-
-@media (max-width: 992px) {
-  .espace-rows {
-    margin-bottom: 5%;
-  }
-
-  .titre-jour {
-    font-size: 40px;
-  }
-}
-
-.bordered {
-    -webkit-box-shadow:inset 0px 0px 0px 2px #eeeeee;
-    -moz-box-shadow:inset 0px 0px 0px 2px #eeeeee;
-    box-shadow:inset 0px 0px 0px 2px #eeeeee;
-}
-
-.event-comment {
-  height: 100%;
-}
-
-.heure_de_cours {
-  font-weight: bold;
-}
-
-.z-depth-3-inverted {
-    -webkit-box-shadow: 0 -8px 17px 2px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
-    box-shadow: 0 -8px 17px 2px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
 }

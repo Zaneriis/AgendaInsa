@@ -1,5 +1,48 @@
 <?php
 
+  /* FAUT MODIFIER CA PCK LA TAILLE DES PLAGES EST DANS JOUR.PHP ET CEST 2 METHODES QUI
+  PERMETTENT DAVOIR LE GRAND TABLEAU AVEC LES EVENEMENTS TRIES PAR PLAGE HORAIRE */
+
+
+  function putEventInPlage(&$tableauPlages, $event) {
+    $limitesHorairesEvent = array_map('trim', explode("-",$event->time));
+
+    $debutEvent = $limitesHorairesEvent[0];
+    $finEvent = $limitesHorairesEvent[1];
+
+    $periodEvent = new DatePeriod(new DateTime($debutEvent), new DateInterval('PT15M'), new DateTime($finEvent));
+
+    foreach($periodEvent as $hour) {
+      $hourFormatted = $hour->format("H:i");
+
+      array_push($tableauPlages[$hourFormatted], $event);
+    }
+
+  }
+
+  function getPlages($heureDepart=NULL, $heureFin=NULL, $interval=NULL) {
+
+    if (is_null($heureDepart)) {
+      $heureDepart = new DateTime("08:00");
+    }
+    if (is_null($heureFin)) {
+      $heureFin = new DateTime("20:00");
+    }
+    if (is_null($interval)) {
+      $interval = new DateInterval("PT15M");
+    }
+
+    $period = new DatePeriod($heureDepart, $interval, $heureFin);
+
+    $plages = array();
+
+    foreach ($period as $hour) {
+      $plages[$hour->format("H:i")] = array();
+    }
+
+    return $plages;
+  }
+
 require_once('Jour.php');
   /**
    *
@@ -91,7 +134,7 @@ require_once('Jour.php');
       else {
         $i = 1;
         foreach ($this->listJours as $value) {
-          echo "<div class='outer-col col s12 bordered' id='ancre_custom_".$i."'>";
+          echo "<div class='outer-col col s12 ' id='ancre_custom_".$i."'>";
           $value->vue();
           echo "</div>";
           $i++;

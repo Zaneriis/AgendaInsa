@@ -31,6 +31,7 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
         <!--Import materialize.css-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
 
+        <link href="vue/css/hover.css" rel="stylesheet" media="all">
         <link rel="stylesheet" href="vue/css/index.css">
         <link rel="stylesheet" href="vue/css/jour.css">
 

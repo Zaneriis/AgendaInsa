@@ -1,299 +1,23 @@
 <?php
-  define("BASE_DE_DONNEES", "/bd2 /");
-  define("REUNION", "/Reunion/");
-  define("GESTION_STRATEGIE_FINANCE","/Gestion Strategie Finance/");
-  define("TRAITEMENT_INFORMATION","/tim/");
-  define("TRAITEMENT_IMAGE","/ti /");
-  define("ESPAGNOL","/Espagnol /");
-  define("RECHERCHE_OPERATIONELLE","/ro /");
-  define("ALLEMAND","/Allemand /");
-  define("ANGLAIS","/Anglais /");
-  define("FRANCAISE_LANGUE_ETRANGERE","/Fle /");
-  define("METHODE_GESTION_PROJET","/mgpi /");
-  define("RESEAU","/ri /");
 
-  function getCouleur($event) {
-
-
-
-    if (preg_match(BASE_DE_DONNEES, $event->comment)) {
-      $couleur = "brown";
-    }
-    elseif (preg_match(REUNION, $event->comment)) {
-      $couleur = "pink";
-    }
-
-    elseif (preg_match(GESTION_STRATEGIE_FINANCE, $event->comment)) {
-      $couleur = "purple";
-    }
-    elseif (preg_match(TRAITEMENT_IMAGE, $event->comment)) {
-      $couleur = "amber";
-    }/*
-    elseif (preg_match(TRAITEMENT_INFORMATION, $event->comment)) {
-      $couleur = "deep-purple";
-    }
-    elseif (preg_match(ESPAGNOL, $event->comment)) {
-      $couleur = "indigo";
-    }
-    elseif (preg_match(RECHERCHE_OPERATIONELLE, $event->comment)) {
-      $couleur = "blue";
-    }
-    elseif (preg_match(ALLEMAND, $event->comment)) {
-      $couleur = "teal";
-    }
-    elseif (preg_match(ANGLAIS, $event->comment)) {
-      $couleur = "green";
-    }
-    elseif (preg_match(FRANCAISE_LANGUE_ETRANGERE, $event->comment)) {
-      $couleur = "light-green";
-    }
-    elseif (preg_match(METHODE_GESTION_PROJET, $event->comment)) {
-      $couleur = "lime";
-    }*/
-    elseif (preg_match(RESEAU, $event->comment)) {
-      $couleur = "yellow";
-    }
-    else {
-      $couleur = couleurRandom();
-    }
-
-    return array("$couleur lighten-3", "$couleur lighten-2");
-
-  }
-
-  function couleurRandom() {
-    static $compteur = 0;
-
-    $couleurs = array("red","pink","purple","deep-purple","indigo","blue","teal","green","light-green","lime","yellow","amber","orange","deep-orange","brown");
-
-    $couleur = $couleurs[$compteur];
-
-
-    $compteur++;
-
-    if ($compteur >= sizeof($couleurs)) {
-      $compteur = 0;
-    }
-
-    return $couleur;
-  }
-  /*
-  function getCouleur($event) {
-    static $compteur = 0;
-
-    $couleurs = array("red","pink","purple","deep-purple","indigo","blue","teal","green","light-green","lime","yellow","amber","orange","deep-orange","brown");
-
-    $couleur = $couleurs[$compteur];
-
-
-    $compteur++;
-
-    if ($compteur >= sizeof($couleurs)) {
-      $compteur = 0;
-    }
-
-    return array("$couleur lighten-3", "$couleur lighten-2");
-
-  }*/
-  function putEventInPlage(&$tableauPlages, $event) {
-    $limitesHorairesEvent = array_map('trim', explode("-",$event->time));
-
-    $debutEvent = $limitesHorairesEvent[0];
-    $finEvent = $limitesHorairesEvent[1];
-
-    $periodEvent = new DatePeriod(new DateTime($debutEvent), new DateInterval('PT15M'), new DateTime($finEvent));
-
-    foreach($periodEvent as $hour) {
-      $hourFormatted = $hour->format("H:i");
-
-      array_push($tableauPlages[$hourFormatted], $event);
-    }
-
-  }
-
-
-  function getClasseRowEvent($evenements) {
-    if (empty($evenements)) {
-      return "row-event-empty";
-    }
-    return "row-event";
-  }
-
-  function nombrePlagesEvenement($event) {
-
-    list($debutEvent, $finEvent) = getBornesEvent($event);
-
-    return iterator_count(new DatePeriod(new DateTime($debutEvent), new DateInterval('PT15M'), new DateTime($finEvent)));
-
-  }
-
-
-
-  function afficherPause() {
-    echo "<div class='row no-mb' style='height: 2vh'>";
-    echo "</div>";
-  }
-
-  function getNombrePlagesDecalage($event, $evenements) {
-    //pour calculer les pauses en fonction du décalage entre le début de l'évenement (1er paramètre) et le début
-    //du cours le plus tot dans la liste des évènements (2nd paramètre)
-
-    $eventLePlusTot = getEventLePlusTot($evenements);
-    list($debutEventTot, $finEventTot) = getBornesEvent($eventLePlusTot);
-    list($debutEvent, $finEvent) = getBornesEvent($event);
-
-    //echo "eventleplustot : $debutEventTot";
-    //echo "event : $debutEvent";
-
-    if (!($debutEventTot == $debutEvent)) {
-      //echo "c pas pareil faut des pauses";
-      return count(getPlages($heureDepart=$debutEventTot, $heureFin=$debutEvent));
-      //echo "nb pauses : $nbPauses";
-
-
-      /*
-      for ($i=0; $i<$nbPauses; $i++) {
-        afficherPause();
-      }*/
-
-    }
-
-    return 0;
-
-  }
-
-  function afficherEvent($evenements) {
-
-    echo "<div class='row no-mb' >";
-
-    foreach ($evenements as $event) {
-
-
-
-      if (!property_exists($event, "estAffiche") or !$event->estAffiche) {
-        list ($couleurPrincipale, $couleurSecondaire) = getCouleur($event);
-
-        if (count($evenements) == 5) { //division pas entiere avec 5 pose probleme quand il y a 5 cours en meme temps
-          $nbColonnes = 2;
-        } else {
-          $nbColonnes = (12/count($evenements));
-        }
-
-        $nombrePlagesDecalage = getNombrePlagesDecalage($event, $evenements);
-
-
-
-        $nbplages = nombrePlagesEvenement($event);
-        $tailleEvenement = 2 * ($nbplages + $nombrePlagesDecalage);
-
-        echo "<div class='col-event col s$nbColonnes ' style='height:".$tailleEvenement."vh;'>";
-
-          if ($nombrePlagesDecalage != 0) {
-            echo "<div class='row'><div class='col s12'>";
-            for ($i=0; $i<$nombrePlagesDecalage; $i++) {
-              afficherPause();
-            }
-            echo "</div></div>";
-          }
-
-          echo "<div class='row'><div data-position='top' data-tooltip='$event->comment ($event->time)'  class='col s12 tooltipped' style='height: ".(2*$nbplages)."vh;'>";
-
-
-
-            echo "<div class='row center-align $couleurSecondaire'><div class='col s12'";
-              echo "<span class='heure_de_cours'>".$event->time."</span>";
-            echo "</div></div>";
-
-            echo "<div class='row $couleurPrincipale'><div class='col s12 event-comment'>";
-              echo $event->comment;
-            echo "</div></div>";
-
-          echo "</div></div>";
-
-
-        echo "</div>";
-
-        $event->estAffiche = TRUE;
-      }
-
-    }
-
-    echo "</div>";
-
-
-  }
-
-
-
-  function eventLePlusLong($evenements) {
-    $periodeMax = 0;
-    $eventLePlusLong = $evenements[0];
-
-    foreach ($evenements as $event) {
-
-      list($debutEvent, $finEvent) = getBornesEvent($event);
-      $time1 = strtotime($debutEvent);
-      $time2 = strtotime($finEvent);
-      $difference = round(abs($time2 - $time1) / 3600,2);
-
-      if ($difference >= $periodeMax) {
-        $periodeMax = $difference;
-        $eventLePlusLong = $event;
-      }
-
-    }
-
-    return $eventLePlusLong;
-  }
-
-  function eventsConcomitants($plages, $evenements) {
-
-    $eventLePlusLong = eventLePlusLong($evenements);
-
-    list($heureDebut, $heureFin) = getBornesEvent($eventLePlusLong);
-
-    $eventsTrouves = array();
-    $nouvellesPlages = getPlages($heureDepart=$heureDebut, $heureFin=$heureFin);
-
-    foreach (array_keys($nouvellesPlages) as $heureATester) {
-      foreach ($plages[$heureATester] as $event) {
-        if (!in_array($event, $eventsTrouves)) {
-          $eventsTrouves[] = $event;
-        }
-      }
-    }
-
-    return $eventsTrouves;
-  }
-
-
-  function getPlages($heureDepart=NULL, $heureFin=NULL, $interval=NULL) {
-
-    if (is_null($heureDepart)) {
-      $heureDepart = new DateTime("08:00");
-    }
-    if (is_null($heureFin)) {
-      $heureFin = new DateTime("20:00");
-    }
-    if (is_null($interval)) {
-      $interval = new DateInterval("PT15M");
-    }
-
-    $period = new DatePeriod($heureDepart, $interval, $heureFin);
-
-    $plages = array();
-
-    foreach ($period as $hour) {
-      $plages[$hour->format("H:i")] = array();
-    }
-
-    return $plages;
-  }
   /**
    *
    */
   class Jour
   {
+
+    const BASE_DE_DONNEES = "/bd2 /";
+    const REUNION = "/Reunion/";
+    const GESTION_STRATEGIE_FINANCE = "/Gestion Strategie Finance/";
+    const TRAITEMENT_INFORMATION = "/tim/";
+    const TRAITEMENT_IMAGE = "/ti /";
+    const ESPAGNOL = "/Espagnol /";
+    const RECHERCHE_OPERATIONELLE = "/ro /";
+    const ALLEMAND = "/Allemand /";
+    const ANGLAIS = "/Anglais /";
+    const FRANCAISE_LANGUE_ETRANGERE = "/Fle /";
+    const METHODE_GESTION_PROJET = "/mgpi /";
+    const RESEAU = "/ri /";
 
     private $heureDebutPremierePlage;
     private $heureDebutDernierePlage;
@@ -314,6 +38,75 @@
 
       $this->label =  $label;
       $this->evenements = $data;
+    }
+
+    function getCouleur($event) {
+
+      if (preg_match(self::BASE_DE_DONNEES, $event->comment)) {
+        $couleur = "brown";
+      }
+      elseif (preg_match(self::REUNION, $event->comment)) {
+        $couleur = "pink";
+      }
+
+      elseif (preg_match(self::GESTION_STRATEGIE_FINANCE, $event->comment)) {
+        $couleur = "purple";
+      }
+      elseif (preg_match(self::TRAITEMENT_IMAGE, $event->comment)) {
+        $couleur = "amber";
+      }
+      elseif (preg_match(self::TRAITEMENT_INFORMATION, $event->comment)) {
+        $couleur = "deep-purple";
+      }
+      elseif (preg_match(self::ESPAGNOL, $event->comment)) {
+        $couleur = "indigo";
+      }
+      elseif (preg_match(self::RECHERCHE_OPERATIONELLE, $event->comment)) {
+        $couleur = "blue";
+      }
+      elseif (preg_match(self::ALLEMAND, $event->comment)) {
+        $couleur = "teal";
+      }
+      elseif (preg_match(self::ANGLAIS, $event->comment)) {
+        $couleur = "green";
+      }
+      elseif (preg_match(self::FRANCAISE_LANGUE_ETRANGERE, $event->comment)) {
+        $couleur = "light-green";
+      }
+      elseif (preg_match(self::METHODE_GESTION_PROJET, $event->comment)) {
+        $couleur = "lime";
+      }
+      elseif (preg_match(self::RESEAU, $event->comment)) {
+        $couleur = "yellow";
+      }
+      else {
+        $couleur = $this->couleurRandom();
+      }
+
+      return array("$couleur lighten-3", "$couleur lighten-2");
+
+    }
+
+    function couleurRandom() {
+      static $compteur = 0;
+
+      $couleurs = array("red","pink","purple","deep-purple","indigo","blue","teal","green","light-green","lime","yellow","amber","orange","deep-orange","brown");
+
+      $couleur = $couleurs[$compteur];
+
+
+      $compteur++;
+
+      if ($compteur >= sizeof($couleurs)) {
+        $compteur = 0;
+      }
+
+      return $couleur;
+    }
+
+    function getNombrePlages($event) {
+      list($debutEvent, $finEvent) = $this->getBornesEvent($event);
+      return iterator_count(new DatePeriod($debutEvent, $this->tempsPlage, $finEvent));
     }
 
     function getBornesEvent($event) {
@@ -381,8 +174,8 @@
     }
 
     function afficherPause($prochainePlage) {
-        echo "<div class='row' style='height: ".$this->getTaillePlage(1).";'><span>Pause</span></div>";
-        return $prochainePlage->add($this->tempsPlage);
+        echo "<div class='row' style='overflow: hidden; height: ".$this->getTaillePlage(1).";'></div>";
+        $prochainePlage->add($this->tempsPlage);
     }
 
     function getBlocEvenements($prochainePlage, $plages) {
@@ -453,20 +246,54 @@
       $evenementsDuBloc = $this->getBlocEvenements($prochainePlage, $plages);
       $colonnes = $this->trierEvenementsBloc($evenementsDuBloc);
 
-      echo "<div class'row'>";
+      echo "<div class='row' style='display: flex'>";
       foreach ($colonnes as $nbColonne => $colonne) {
 
-        echo "<div class'column' style='float: left; width: ".(100/count($colonnes))."%;'>";
+        echo "<div class='column' style='overflow: hidden; width: ".(100/count($colonnes))."%;'>";
+
+        $FinDernierCours = NULL;
         foreach ($colonne as $event) {
-          echo $event->comment;
+
+          list($debutEvent, $finEvent) = $this->getBornesEvent($event);
+          list($couleurPrincipale, $couleurSecondaire) = $this->getCouleur($event);
+
+          while(!is_null($FinDernierCours) && $debutEvent > $FinDernierCours) {
+            $FinDernierCours = $this->afficherPause($FinDernierCours); //argument change rien
+          }
+
+          echo "<style type='text/css'>
+
+            .hvr-shutter-out-horizontal:before {
+              background : rgba(255,255,255,0.2);
+            }
+
+            .hvr-shutter-out-horizontal:hover {
+              color: black;
+            }
+          </style>";
+
+          echo "<div class='row col-event  $couleurPrincipale hvr-shutter-out-horizontal' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
+          echo "<div class='row center-align $couleurSecondaire'>";
+          echo "$event->time";
+          echo "</div>";
+          echo "<div class='row'>";
+          echo "<span> $event->comment </span>";
+          echo "</div>";
+          echo "</div></div>";
+
+          $FinDernierCours = $finEvent;
+
           $event->estAffiche = TRUE;
+
         }
         echo "</div>";
 
       }
       echo "</div>";
 
-      return $this->getBornesEvent($this->getEventLePlusTard($evenementsDuBloc))[1];
+      while($prochainePlage < $this->getBornesEvent($this->getEventLePlusTard($evenementsDuBloc))[1]) {
+        $prochainePlage->add($this->tempsPlage);
+      }
     }
 
     function afficherHeader() {
@@ -487,15 +314,12 @@
         if ($this->plageAffichable($prochainePlage, $plages)) {
 
           if(empty($plages[$prochainePlage->format("H:i")])) {
-            $prochainePlage = $this->afficherPause($prochainePlage);
+            $this->afficherPause($prochainePlage);
           }
           else {
-            $prochainePlage = $this->afficherBlocCours($prochainePlage, $plages);
+            $this->afficherBlocCours($prochainePlage, $plages);
           }
 
-        }
-        else {
-          $prochainePlage->add($this->tempsPlage);
         }
 
       } while($prochainePlage < $this->heureDebutDernierePlage);
