@@ -1,20 +1,3 @@
-$('body').append('<a class="btn-floating" id="puce" href="#ancre_custom_2"><i class="material-icons">arrow_downward</i></a>');
-$('head').append('<style>\
-#puce{\
-  display: none;\
-}\
-@media (max-width: 992px){\
-  #puce{\
-    display: block!important;\
-    position: fixed!important;\
-    bottom: 20px;\
-    right: 20px;\
-  }\
-}</style>');
-
-
-
-
 $(document).scroll(function(){
   var height = $(document).height();
   var offset = $(document).scrollTop();

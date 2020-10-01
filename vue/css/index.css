@@ -7,3 +7,28 @@
 body {
   background-color: #eeeeee;
 }
+
+.agenda-operations-floating {
+  display: none;
+}
+
+@media (max-width: 992px){
+  .agenda-operations-floating {
+    display: block !important;
+    position: fixed !important;
+    bottom: 20px;
+  }
+
+  #puce {
+    right: 20px;
+  }
+
+  #semaine_suivante {
+    right: 75px;
+  }
+
+  #semaine_precedente {
+    right: 125px;
+  }
+
+}

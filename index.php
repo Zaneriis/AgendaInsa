@@ -11,14 +11,21 @@ $choixSession = new ChoixSession(new BDD());
 
 $session = FALSE;
 $calendar = FALSE;
-$ts = time();
+
+
+if(isset($_GET['ts']) && !empty($_GET['ts'])){
+  $ts = htmlspecialchars($_GET['ts']);
+}
+else {
+  $ts = time();
+}
+
+$agenda = new Agenda($ts-86000,"week",$session,$calendar);
 
 $gestionnaireCookie = new GestionnaireCookie($_COOKIE);
 $session = $gestionnaireCookie->getSession();
 $calendar = $gestionnaireCookie->getCalendrier();
-if(isset($_GET['ts']) && !empty($_GET['ts'])){
-  $ts = htmlspecialchars($_GET['ts']);
-}
+
 // echo $ts.'<br />';
 // echo $session.'<br />';
 // echo $calendar.'<br />';
@@ -49,11 +56,16 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
     <!-- barre navigation normale -->
     <nav>
       <div class="nav-wrapper">
-        <a href="#!" class="brand-logo">Ca ne me rendra pas jambe mieux faite</a>
+        <a href="#!" class=" brand-logo">Ca ne me rendra pas jambe mieux faite</a>
+
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
-          <li><a class="waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
+          <li><a href="?ts=<?php echo $agenda->periodePrecedente("week")?>" data-position="bottom" data-tooltip="Semaine précédente" class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">fast_rewind</i></a></li>
+          <li><a href="?ts=<?php echo $agenda->periodeSuivant("week")?>" data-position="bottom" data-tooltip="Semaine suivante"  class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">fast_forward</i></a></li>
+
+          <li><a class=" waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
 
         </ul>
       </div>
@@ -76,18 +88,23 @@ if(isset($_GET['ts']) && !empty($_GET['ts'])){
     </div>
 
     <!-- menu quand fenetre raccourcie -->
-    <ul class="sidenav" id="mobile-demo">
-      <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a>
+    <ul class="sidenav center-align " id="mobile-demo">
+      <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
+
     </ul>
 
     <div class="container">
       <?php
-        $agenda = new Agenda($ts-86000,"week",$session,$calendar);
         $agenda->vue();
       ?>
     </div>
 
+    <a class="btn-floating agenda-operations-floating tooltipped" data-position="top" data-tooltip="Jour suivant" id="puce" href="#ancre_custom_2"><i class="material-icons">arrow_downward</i></a>
+    <a id="semaine_precedente" href="?ts=<?php echo $agenda->periodePrecedente("week")?>" data-position="top" data-tooltip="Semaine précédente" class="tooltipped agenda-operations-floating btn-floating waves-effect waves-light red"><i class="material-icons">fast_rewind</i></a>
+    <a id="semaine_suivante" href="?ts=<?php echo $agenda->periodeSuivant("week")?>" data-position="top" data-tooltip="Semaine suivante" class="tooltipped agenda-operations-floating btn-floating waves-effect waves-light red"><i class="material-icons">fast_forward</i></a>
+
     <script src="vue/js/index.js"></script>
     <script src="vue/js/buttonScroll.js"></script>
   </body>
+
 </html>
