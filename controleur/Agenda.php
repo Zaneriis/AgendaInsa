@@ -17,7 +17,6 @@
 
       array_push($tableauPlages[$hourFormatted], $event);
     }
-
   }
 
   function getPlages($heureDepart=NULL, $heureFin=NULL, $interval=NULL) {
@@ -55,6 +54,7 @@ require_once('Jour.php');
     private $listJours;
     private $session;
     private $formation;
+    private $filtre_cache;
     public function __construct($time = FALSE, $type = 'week', $session = FALSE, $formation = FALSE)
     {
       if($formation === FALSE) $formation = "2020-ING-ASI-S7";
@@ -64,21 +64,48 @@ require_once('Jour.php');
       $this->type = $type;
       $this->session = $session;
       $this->listJours = array();
+      $this->filtre_cache = $this->getFilter($session);
+      //print_r($session);
+      //print_r($this->filtre_cache);
       $this->loadEvent();
     }
 
+
+      private function getFilter($session_id){
+        $bdd = BDD::load();
+        $cur = $bdd->prep("SELECT * from filtres where id_session = :id and Actif = 1;");
+        //$bdd->addParam($cur,"id",$this->session_id);
+        return $bdd->lirePrep($cur, array("id"=>$session_id));
+      }
+
+      private function checkFiltre($str){
+        foreach ($this->filtre_cache as $value) {
+          if(!$this->checkOneFiltre($str,$value['pattern'])) return false;
+        }
+        return true;
+      }
+
+      private function checkOneFiltre($str,$pattern)
+      {
+        return strpos($str->comment,$pattern) === FALSE;
+      }
+
     private function loadEvent(){
       $url = 'http://api.pacary.net/AgendaInsaRouen/index.php?fo='.$this->formation.'&ty='.$this->getType().'&ts='.$this->getInsaTime();
-      if($this->session !== FALSE){
-        $url = $url.'&ss='.intval($this->session);
-      }
+      // if($this->session !== FALSE){
+      //   $url = $url.'&ss='.intval($this->session);
+      // }
       //$url = "http://51.75.253.173/AgendaInsa/index.json";
       $json = file_get_contents($url);
       $this->data = json_decode($json);
 
 
       foreach ($this->data as $key => $value) {
-        array_push($this->listJours, new Jour($value,$key));
+        $data_jour = array();
+        foreach ($value as $subvalue) {
+          if($this->checkFiltre($subvalue)) array_push($data_jour,$subvalue);
+        }
+        array_push($this->listJours, new Jour($data_jour,$key));
       }
     }
 

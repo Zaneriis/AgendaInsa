@@ -20,15 +20,17 @@ else {
   $ts = time();
 }
 
-$agenda = new Agenda($ts-86000,"week",$session,$calendar);
 
 $gestionnaireCookie = new GestionnaireCookie($_COOKIE);
 $session = $gestionnaireCookie->getSession();
 $calendar = $gestionnaireCookie->getCalendrier();
+//$session = 36;
+$agenda = new Agenda($ts-86000,"week",$session,$calendar);
 
 // echo $ts.'<br />';
 // echo $session.'<br />';
 // echo $calendar.'<br />';
+//exit(0);
 ?>
 
 <html>
