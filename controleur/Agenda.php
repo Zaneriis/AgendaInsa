@@ -70,20 +70,27 @@ require_once('Jour.php');
       $this->loadEvent();
     }
 
-
-      private function getFilter($session_id){
+    public function getSessionPossible(){
         $bdd = BDD::load();
-        $cur = $bdd->prep("SELECT * from filtres where id_session = :id and Actif = 1;");
+        $cur = $bdd->prep("SELECT identifiant, id from compte where groupe = :calendar");
         //$bdd->addParam($cur,"id",$this->session_id);
-        return $bdd->lirePrep($cur, array("id"=>$session_id));
-      }
+        return $bdd->lirePrep($cur, array("calendar"=>$this->formation));
+    }
 
-      private function checkFiltre($str){
-        foreach ($this->filtre_cache as $value) {
-          if(!$this->checkOneFiltre($str,$value['pattern'])) return false;
-        }
-        return true;
+
+    private function getFilter($session_id){
+      $bdd = BDD::load();
+      $cur = $bdd->prep("SELECT * from filtres where id_session = :id and Actif = 1;");
+      //$bdd->addParam($cur,"id",$this->session_id);
+      return $bdd->lirePrep($cur, array("id"=>$session_id));
+    }
+
+    private function checkFiltre($str){
+      foreach ($this->filtre_cache as $value) {
+        if(!$this->checkOneFiltre($str,$value['pattern'])) return false;
       }
+      return true;
+    }
 
       private function checkOneFiltre($str,$pattern)
       {

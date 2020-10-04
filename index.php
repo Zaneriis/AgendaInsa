@@ -30,7 +30,7 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
 // echo $ts.'<br />';
 // echo $session.'<br />';
 // echo $calendar.'<br />';
-//exit(0);
+
 ?>
 
 <html>
@@ -58,7 +58,7 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
     <!-- barre navigation normale -->
     <nav>
       <div class="nav-wrapper">
-        <a href="#!" class=" brand-logo">Ca ne me rendra pas jambe mieux faite</a>
+        <a href="#!" class=" brand-logo">Insa Rouen</a>
 
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
