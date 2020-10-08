@@ -31,4 +31,8 @@ body {
     right: 125px;
   }
 
+  .titre-jour {
+    font-size: 2em;
+    background-color: #e0e0e0;
+  }
 }

@@ -301,7 +301,7 @@
         list($heureLaPlusTot, $osef) = $this->getBornesEvent($this->getEventLePlusTot($this->getEvenements()));
         list($osef, $heureLaPlusTard) = $this->getBornesEvent($this->getEventLePlusTard($this->getEvenements()));
 
-        echo "<div class='row center-align bordered titre-jour'>";
+        echo '<div class="row center-align bordered titre-jour">';
         echo $this->getNom()." <strong>(".$heureLaPlusTot->format("H:i")." - ".$heureLaPlusTard->format("H:i").")</strong>";
         echo "</div>";
     }
