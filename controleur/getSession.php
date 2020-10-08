@@ -14,6 +14,11 @@
   //$bdd->addParam($cur,"id",$this->session_id);
   $data = $bdd->lirePrep($cur, array("calendar"=>$agenda));
 
-  echo json_encode($data);
+
+  $res = array();
+  foreach ($data as $key => $value) {
+    $res[$value['identifiant']] = $value['id'];
+  }
+  echo json_encode($res);
 
 ?>
