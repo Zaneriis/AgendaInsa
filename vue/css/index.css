@@ -32,9 +32,3 @@ body {
   }
 
 }
-
-@media (min-width: 992px) {
-  .brand-logo {
-    margin-left: 2%;
-  }
-}

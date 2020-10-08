@@ -58,7 +58,7 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
     <!-- barre navigation normale -->
     <nav>
       <div class="nav-wrapper">
-        <a href="#!" class=" brand-logo">Insa Rouen</a>
+        <a href="#!" class=" brand-logo center">Insa Rouen</a>
 
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
