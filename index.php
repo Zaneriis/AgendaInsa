@@ -65,6 +65,7 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li><a href="?ts=<?php echo $agenda->periodePrecedente("week")?>" data-position="bottom" data-tooltip="Semaine précédente" class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">fast_rewind</i></a></li>
+          <li><a href="?" data-position="bottom" data-tooltip="Aujourd'hui" class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">today</i></a></li>
           <li><a href="?ts=<?php echo $agenda->periodeSuivant("week")?>" data-position="bottom" data-tooltip="Semaine suivante"  class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">fast_forward</i></a></li>
 
           <li><a class=" waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
