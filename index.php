@@ -69,6 +69,14 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
 
           <li><a class=" waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
 
+          <?php
+            if (isset($_GET["fo"])) {
+              if ($_GET["fo"] == "2020-ING-ASI-S7" || $_GET["fo"] == "2020-ING-ASI-S8") {
+                echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
+              }
+            }
+          ?>
+
         </ul>
       </div>
     </nav>
@@ -77,22 +85,44 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
       <div class="modal-content" style="height: 50vh;">
         <h4>Choisir ma formation</h4>
         <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">textsms</i>
-          <input type="text" id="autocomplete-input" class="autocomplete" autocomplete="off">
-          <label for="autocomplete-input">Autocomplete</label>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">textsms</i>
+            <input type="text" id="autocomplete-input-formation" class="autocomplete" autocomplete="off">
+            <label for="autocomplete-input-formation">Entrez le nom de votre formation</label>
+          </div>
         </div>
       </div>
+      <div class="modal-footer">
+        <a href="#!" id="validation-formation" class="modal-close waves-effect waves-green btn-flat">Valider</a>
+      </div>
+    </div>
+
+    <div id="modal2" class="modal">
+      <div class="modal-content" style="height: 50vh;">
+        <h4>Sélectionnez votre session grâce à votre nom</h4>
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">textsms</i>
+            <input type="text" id="autocomplete-input-session" class="autocomplete" autocomplete="off">
+            <label for="autocomplete-input-session">Entrez votre nom</label>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" id="validation-formation" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        <a href="#!" id="validation-session" class="modal-close waves-effect waves-green btn-flat">Valider</a>
       </div>
     </div>
 
     <!-- menu quand fenetre raccourcie -->
     <ul class="sidenav center-align " id="mobile-demo">
-      <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
-
+      <li><a class="waves-effect btn waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
+      <?php
+        if (isset($_GET["fo"])) {
+          if ($_GET["fo"] == "2020-ING-ASI-S7" || $_GET["fo"] == "2020-ING-ASI-S8") {
+            echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
+          }
+        }
+      ?>
     </ul>
 
     <div class="container">

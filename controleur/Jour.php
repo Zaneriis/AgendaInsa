@@ -263,16 +263,16 @@
 
           echo "<style type='text/css'>
 
-            .hvr-shutter-out-horizontal:before {
+            .hvr-sweep-to-bottom:before {
               background : rgba(255,255,255,0.2);
             }
 
-            .hvr-shutter-out-horizontal:hover {
+            .hvr-sweep-to-bottom:hover {
               color: black;
             }
           </style>";
 
-          echo "<div class='row col-event  $couleurPrincipale hvr-shutter-out-horizontal' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
+          echo "<div class='row col-event  $couleurPrincipale hvr-sweep-to-bottom' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
           echo "<div class='row center-align $couleurSecondaire'>";
           echo "$event->time";
           echo "</div>";

@@ -4,34 +4,62 @@ $(document).ready(function(){
     $('.modal').modal();
 
     var formationsComplet = [];
+    var sessionsComplet = [];
 
     $.ajax({
       url: "controleur/getAgendas.php",
-      success: function(data) {
-        console.log(data);
-        data = JSON.parse(data);
-        console.log(data);
-        formationsComplet = JSON.parse(JSON.stringify(data)); //stockage global résultat de l'url
+      success: function(dataFormations) {
 
-        $.each(data, function(key, value) {
-          data[key] = null;
+        dataFormations = JSON.parse(dataFormations);
+        formationsComplet = JSON.parse(JSON.stringify(dataFormations)); //stockage global résultat de l'url
+
+        $.each(dataFormations, function(key, value) {
+          dataFormations[key] = null;
         });
 
-        $('input.autocomplete').autocomplete({
-          data: data
+        $('#autocomplete-input-formation').autocomplete({
+          data: dataFormations
         });
       },
     });
 
+    $.ajax({
+      url: "controleur/getSession.php?fo=2020-ING-ASI-S7",
+      success: function(dataSessions) {
+
+          dataSessions = JSON.parse(dataSessions);
+          sessionsComplet = JSON.parse(JSON.stringify(dataSessions));
+
+          $.each(dataSessions, function(key, value) {
+            dataSessions[key] = null;
+          });
+
+          $('#autocomplete-input-session').autocomplete({
+            data: dataSessions
+          });
+      },
+    });
+
     $('#validation-formation').click(function() {
-      console.log(formationsComplet);
-      var valeurSaisie = $('#autocomplete-input').val();
+
+      var valeurSaisie = $('#autocomplete-input-formation').val();
       if (formationsComplet.hasOwnProperty(valeurSaisie)) {
         console.log(formationsComplet[valeurSaisie]);
         location.assign("index.php?fo="+formationsComplet[valeurSaisie]);
       }
       else {
         alert("La valeur saisie ne correspond à aucun agenda repertorié, veuillez réessayer");
+      }
+    });
+
+    $('#validation-session').click(function() {
+
+      var valeurSaisie = $('#autocomplete-input-session').val();
+      if (sessionsComplet.hasOwnProperty(valeurSaisie)) {
+        location.assign("index.php?fo=2020-ING-ASI-S7&ss="+sessionsComplet[valeurSaisie]);
+      }
+      else {
+        alert("La valeur saisie ne correspond à aucun étudiant, veuillez réessayer");
       }
     });
 
