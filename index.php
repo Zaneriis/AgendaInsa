@@ -71,8 +71,8 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
           <li><a class=" waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
 
           <?php
-            if (isset($_GET["fo"])) {
-              if ($_GET["fo"] == "2020-ING-ASI-S7" || $_GET["fo"] == "2020-ING-ASI-S8") {
+            if (isset($calendar)) {
+              if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8") {
                 echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
               }
             }
@@ -118,8 +118,8 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
     <ul class="sidenav center-align " id="mobile-demo">
       <li><a class="waves-effect btn waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
       <?php
-        if (isset($_GET["fo"])) {
-          if ($_GET["fo"] == "2020-ING-ASI-S7" || $_GET["fo"] == "2020-ING-ASI-S8") {
+        if (isset($calendar)) {
+          if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8") {
             echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
           }
         }
