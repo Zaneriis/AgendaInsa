@@ -25,7 +25,7 @@ $gestionnaireCookie = new GestionnaireCookie($_COOKIE);
 $session = $gestionnaireCookie->getSession();
 $calendar = $gestionnaireCookie->getCalendrier();
 //$session = 36;
-$agenda = new Agenda($ts-86000,"week",$session,$calendar);
+$agenda = new Agenda($ts+120000,"week",$session,$calendar);
 
 // echo $ts.'<br />';
 // echo $session.'<br />';
@@ -43,7 +43,7 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
         <link href="vue/css/hover.css" rel="stylesheet" media="all">
         <link rel="stylesheet" href="vue/css/index.css">
         <link rel="stylesheet" href="vue/css/jour.css">
-
+	<title>Agenda Insa Rouen</title>
         <script src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <!--Let browser know website is optimized for mobile-->
