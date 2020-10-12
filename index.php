@@ -58,16 +58,25 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
     <!-- barre navigation normale -->
     <nav>
       <div class="nav-wrapper">
-        <a href="#!" class=" brand-logo">Insa Rouen</a>
+        <a href="#!" class=" brand-logo center">Insa Rouen</a>
 
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 
         <ul class="right hide-on-med-and-down">
           <!-- Dropdown Trigger -->
           <li><a href="?ts=<?php echo $agenda->periodePrecedente("week")?>" data-position="bottom" data-tooltip="Semaine précédente" class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">fast_rewind</i></a></li>
+          <li><a href="?" data-position="bottom" data-tooltip="Aujourd'hui" class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">today</i></a></li>
           <li><a href="?ts=<?php echo $agenda->periodeSuivant("week")?>" data-position="bottom" data-tooltip="Semaine suivante"  class="tooltipped btn-floating waves-effect waves-light red"><i class="material-icons">fast_forward</i></a></li>
 
           <li><a class=" waves-effect waves-light btn modal-trigger" href="#modal1">Choisir ma formation</a></li>
+
+          <?php
+            if (isset($calendar)) {
+              if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8") {
+                echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
+              }
+            }
+          ?>
 
         </ul>
       </div>
@@ -77,22 +86,44 @@ $agenda = new Agenda($ts-86000,"week",$session,$calendar);
       <div class="modal-content" style="height: 50vh;">
         <h4>Choisir ma formation</h4>
         <div class="row">
-        <div class="input-field col s12">
-          <i class="material-icons prefix">textsms</i>
-          <input type="text" id="autocomplete-input" class="autocomplete" autocomplete="off">
-          <label for="autocomplete-input">Autocomplete</label>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">textsms</i>
+            <input type="text" id="autocomplete-input-formation" class="autocomplete" autocomplete="off">
+            <label for="autocomplete-input-formation">Entrez le nom de votre formation</label>
+          </div>
         </div>
       </div>
+      <div class="modal-footer">
+        <a href="#!" id="validation-formation" class="modal-close waves-effect waves-green btn-flat">Valider</a>
+      </div>
+    </div>
+
+    <div id="modal2" class="modal">
+      <div class="modal-content" style="height: 50vh;">
+        <h4>Sélectionnez votre session grâce à votre nom</h4>
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">textsms</i>
+            <input type="text" id="autocomplete-input-session" class="autocomplete" autocomplete="off">
+            <label for="autocomplete-input-session">Entrez votre nom</label>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" id="validation-formation" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+        <a href="#!" id="validation-session" class="modal-close waves-effect waves-green btn-flat">Valider</a>
       </div>
     </div>
 
     <!-- menu quand fenetre raccourcie -->
     <ul class="sidenav center-align " id="mobile-demo">
-      <li><a class="waves-effect waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
-
+      <li><a class="waves-effect btn waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
+      <?php
+        if (isset($calendar)) {
+          if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8") {
+            echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
+          }
+        }
+      ?>
     </ul>
 
     <div class="container">
