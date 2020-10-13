@@ -72,7 +72,7 @@ $agenda = new Agenda($ts+120000,"week",$session,$calendar);
 
           <?php
             if (isset($calendar)) {
-              if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8") {
+              if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8" || $calendar === FALSE) {
                 echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
               }
             }
