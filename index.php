@@ -1,6 +1,6 @@
 <?php ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+error_reporting(0);
 
 
 require_once("controleur/ChoixSession.php");
@@ -119,7 +119,7 @@ $agenda = new Agenda($ts+120000,"week",$session,$calendar);
       <li><a class="waves-effect btn waves-light modal-trigger" href="#modal1">Choisir ma formation</a></li>
       <?php
         if (isset($calendar)) {
-          if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8") {
+          if ($calendar == "2020-ING-ASI-S7" || $calendar == "2020-ING-ASI-S8" || $calendar == FALSE) {
             echo '<li><a class="waves-effect waves-light btn modal-trigger" href="#modal2">Mon emploi du temps</a></li>';
           }
         }
