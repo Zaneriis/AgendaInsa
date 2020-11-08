@@ -132,9 +132,10 @@ $agenda = new Agenda($ts+120000,"week",$session,$calendar);
       ?>
     </div>
 
-    <a class="btn-floating agenda-operations-floating tooltipped" data-position="top" data-tooltip="Jour suivant" id="puce" href="#ancre_custom_2"><i class="material-icons">arrow_downward</i></a>
-    <a id="semaine_precedente" href="?ts=<?php echo $agenda->periodePrecedente("week")?>" data-position="top" data-tooltip="Semaine précédente" class="tooltipped agenda-operations-floating btn-floating waves-effect waves-light red"><i class="material-icons">fast_rewind</i></a>
-    <a id="semaine_suivante" href="?ts=<?php echo $agenda->periodeSuivant("week")?>" data-position="top" data-tooltip="Semaine suivante" class="tooltipped agenda-operations-floating btn-floating waves-effect waves-light red"><i class="material-icons">fast_forward</i></a>
+    <a class="btn-floating tooltipped agenda-operations-floating" data-position="top" data-tooltip="Jour suivant" id="puce" href="#ancre_custom_2"><i class="material-icons">arrow_downward</i></a>
+    <a class="btn-floating tooltipped agenda-operations-floating waves-effect waves-light red" id="semaine_precedente" href="?ts=<?php echo $agenda->periodePrecedente("week")?>" data-position="top" data-tooltip="Semaine précédente" ><i class="material-icons">fast_rewind</i></a>
+    <a class="btn-floating tooltipped agenda-operations-floating waves-effect waves-light red" id="aujourdhui" href="?" data-position="top" data-tooltip="Cette semaine" ><i class="material-icons">today</i></a>
+    <a class="btn-floating tooltipped agenda-operations-floating waves-effect waves-light red" id="semaine_suivante" href="?ts=<?php echo $agenda->periodeSuivant("week")?>" data-position="top" data-tooltip="Semaine suivante" ><i class="material-icons">fast_forward</i></a>
 
     <script src="vue/js/index.js"></script>
     <script src="vue/js/buttonScroll.js"></script>

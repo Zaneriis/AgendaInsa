@@ -28,6 +28,10 @@ body {
   }
 
   #semaine_precedente {
+    right: 180px;
+  }
+
+  #aujourdhui {
     right: 125px;
   }
 
