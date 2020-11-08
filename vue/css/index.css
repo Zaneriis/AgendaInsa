@@ -40,3 +40,15 @@ body {
     background-color: #e0e0e0;
   }
 }
+
+.page-footer {
+  padding-top: 0;
+}
+
+.page-footer .container {
+  background-color : transparent;
+}
+
+.page-footer a {
+  color : inherit;
+}

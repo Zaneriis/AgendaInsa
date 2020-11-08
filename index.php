@@ -139,6 +139,14 @@ $agenda = new Agenda($ts+120000,"week",$session,$calendar);
 
     <script src="vue/js/index.js"></script>
     <script src="vue/js/buttonScroll.js"></script>
+
+    <footer class="page-footer">
+         <div class="footer-copyright">
+           <div class="container">
+           © Développé par <a href="https://github.com/Zaneriis">Léo Pacary</a> et <a href="https://github.com/AlexisMelo">Alexis Melo da Silva</a>
+           </div>
+         </div>
+       </footer>
   </body>
 
 </html>
