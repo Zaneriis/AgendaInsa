@@ -272,7 +272,7 @@
             }
           </style>";
 
-          echo "<div class='row col-event  $couleurPrincipale hvr-sweep-to-bottom' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
+          echo "<div data-position='bottom' data-tooltip='$event->comment' class='tooltipped row col-event  $couleurPrincipale hvr-sweep-to-bottom' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
           echo "<div class='row center-align $couleurSecondaire'>";
           echo "$event->time";
           echo "</div>";
