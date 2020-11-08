@@ -19,3 +19,7 @@
     width: 20% !important;
   }
 }
+
+a {
+  color :inherit;
+}

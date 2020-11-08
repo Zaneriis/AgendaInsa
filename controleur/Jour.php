@@ -9,7 +9,7 @@
     const BASE_DE_DONNEES = "/bd2 /";
     const REUNION = "/Reunion/";
     const GESTION_STRATEGIE_FINANCE = "/Gestion Strategie Finance/";
-    const TRAITEMENT_INFORMATION = "/tim/";
+    const THEORIE_INFORMATION = "/tim/";
     const TRAITEMENT_IMAGE = "/ti /";
     const ESPAGNOL = "/Espagnol /";
     const RECHERCHE_OPERATIONELLE = "/ro /";
@@ -57,7 +57,7 @@
       elseif (preg_match(self::TRAITEMENT_IMAGE, $event->comment)) {
         $couleur = "amber";
       }
-      elseif (preg_match(self::TRAITEMENT_INFORMATION, $event->comment)) {
+      elseif (preg_match(self::THEORIE_INFORMATION, $event->comment)) {
         $couleur = "deep-purple";
       }
       elseif (preg_match(self::ESPAGNOL, $event->comment)) {
@@ -91,6 +91,58 @@
       }
 
       return array("$couleur lighten-3", "$couleur lighten-2");
+
+    }
+
+    function getMoodleLink($event) {
+
+      $link = "https://moodle.insa-rouen.fr/my/";
+
+      if (preg_match(self::BASE_DE_DONNEES, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=31";
+      }
+      elseif (preg_match(self::REUNION, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=765";
+      }
+
+      elseif (preg_match(self::GESTION_STRATEGIE_FINANCE, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=1474";
+      }
+      elseif (preg_match(self::TRAITEMENT_IMAGE, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=167";
+      }
+      elseif (preg_match(self::THEORIE_INFORMATION, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=220";
+      }
+      elseif (preg_match(self::ESPAGNOL, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/index.php?categoryid=16";
+      }
+      elseif (preg_match(self::RECHERCHE_OPERATIONELLE, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/enrol/index.php?id=1206";
+      }
+      elseif (preg_match(self::ALLEMAND, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/index.php?categoryid=16";
+      }
+      elseif (preg_match(self::ANGLAIS, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/index.php?categoryid=16";
+      }
+      elseif (preg_match(self::FRANCAISE_LANGUE_ETRANGERE, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/index.php?categoryid=16";
+      }
+      elseif (preg_match(self::METHODE_GESTION_PROJET, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=939";
+      }
+      elseif (preg_match(self::RESEAU, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=68";
+      }
+      elseif (preg_match(self::IML, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=92";
+      }
+      elseif (preg_match(self::GP, $event->comment)) {
+        $link = "https://moodle.insa-rouen.fr/course/view.php?id=1291";
+      }
+
+      return $link;
 
     }
 
@@ -279,14 +331,14 @@
             }
           </style>";
 
-          echo "<div data-position='bottom' data-tooltip='$event->comment' class='tooltipped row col-event  $couleurPrincipale hvr-sweep-to-bottom' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
+          echo "<a href='".($this->getMoodleLink($event))."' target='_blank' rel='noopener noreferrer' data-position='bottom' data-tooltip='$event->comment' class='tooltipped row col-event  $couleurPrincipale hvr-sweep-to-bottom' style='height: ".($this->getTaillePlage($this->getNombrePlages($event))).";'><div class=' col s12'>";
           echo "<div class='row center-align $couleurSecondaire'>";
           echo "$event->time";
           echo "</div>";
           echo "<div class='row'>";
           echo "<span> $event->comment </span>";
           echo "</div>";
-          echo "</div></div>";
+          echo "</div></a>";
 
           $FinDernierCours = $finEvent;
 
