@@ -18,6 +18,8 @@
     const FRANCAISE_LANGUE_ETRANGERE = "/Fle /";
     const METHODE_GESTION_PROJET = "/mgpi /";
     const RESEAU = "/ri /";
+    const GP = "/Gestion de Projet/";
+    const IML = "/iml /";
 
     private $heureDebutPremierePlage;
     private $heureDebutDernierePlage;
@@ -79,7 +81,12 @@
       elseif (preg_match(self::RESEAU, $event->comment)) {
         $couleur = "yellow";
       }
-      else {
+      elseif (preg_match(self::IML, $event->comment)) {
+        $couleur = "orange";
+      }
+      elseif (preg_match(self::GP, $event->comment)) {
+        $couleur = "deep-orange";
+      }      else {
         $couleur = $this->couleurRandom();
       }
 
